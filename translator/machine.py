@@ -1,0 +1,1 @@
+REGS_COUNT = 6
