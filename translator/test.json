@@ -1,0 +1,62 @@
+[
+    {
+        "opcode": "mov",
+        "arg1": "r0",
+        "arg2": 0,
+        "term": "mov"
+    },
+    {
+        "opcode": "mov",
+        "arg1": "r1",
+        "arg2": "[r0]",
+        "term": "mov"
+    },
+    {
+        "opcode": "add",
+        "args": [
+            "r0",
+            1
+        ],
+        "res_reg": "r0",
+        "term": "add"
+    },
+    {
+        "opcode": "printc",
+        "arg1": "r1",
+        "term": "printstr"
+    },
+    {
+        "opcode": "cmp",
+        "arg1": "r1",
+        "arg2": "\u0000",
+        "res_reg": "r1",
+        "term": "cmp"
+    },
+    {
+        "opcode": "jne",
+        "arg1": 101,
+        "term": "jne"
+    },
+    {
+        "opcode": "hlt",
+        "term": "hlt"
+    },
+    {
+        "data": {
+            "0": 50,
+            "50": "H",
+            "51": "e",
+            "52": "l",
+            "53": "l",
+            "54": "o",
+            "55": ",",
+            "56": " ",
+            "57": "w",
+            "58": "o",
+            "59": "r",
+            "60": "l",
+            "61": "d",
+            "62": "\u0000"
+        }
+    }
+]

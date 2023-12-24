@@ -1,4 +1,4 @@
-from machine import REGS_COUNT
+from machine1 import REGS_COUNT
 
 
 class RegisterController:
