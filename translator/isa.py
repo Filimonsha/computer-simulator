@@ -35,8 +35,6 @@ class Opcode(str, Enum):
     DEV = "dev"
     MOD = "mod"
     MOV = "mov"
-
-
 class Term(namedtuple('Term', 'pos word')):
     """Описание выражения из исходного текста программы."""
     # сделано через класс, чтобы был docstring

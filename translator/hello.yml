@@ -1,0 +1,1141 @@
+in_source: |-
+  .data:
+  hw string 12, "Hello world!"
+  len num 0
+  addr num 0
+  count num 0
+  .text:
+  ld [hw]
+  wr len
+  loop:
+  ld [len]
+  cmp count
+  je end
+  ld [addr]
+  inc
+  ld [ac]
+  out
+  ld [addr]
+  inc
+  wr addr
+  ld [len]
+  dec
+  wr len
+  jmp loop
+  end:
+  hlt
+
+in_stdin: |
+
+out_code: |
+  [
+      12,
+      "H",
+      "e",
+      "l",
+      "l",
+      "o",
+      " ",
+      "w",
+      "o",
+      "r",
+      "l",
+      "d",
+      "!",
+      0,
+      0,
+      0,
+      {
+          "opcode": "LD_REL",
+          "args": [
+              0
+          ]
+      },
+      {
+          "opcode": "WR",
+          "args": [
+              13
+          ]
+      },
+      {
+          "opcode": "LD_REL",
+          "args": [
+              13
+          ]
+      },
+      {
+          "opcode": "CMP",
+          "args": [
+              15
+          ]
+      },
+      {
+          "opcode": "JE",
+          "args": [
+              32
+          ]
+      },
+      {
+          "opcode": "LD_REL",
+          "args": [
+              14
+          ]
+      },
+      {
+          "opcode": "INC",
+          "args": []
+      },
+      {
+          "opcode": "LD_REL",
+          "args": [
+              "AC"
+          ]
+      },
+      {
+          "opcode": "OUT",
+          "args": [
+              -1
+          ]
+      },
+      {
+          "opcode": "LD_REL",
+          "args": [
+              14
+          ]
+      },
+      {
+          "opcode": "INC",
+          "args": []
+      },
+      {
+          "opcode": "WR",
+          "args": [
+              14
+          ]
+      },
+      {
+          "opcode": "LD_REL",
+          "args": [
+              13
+          ]
+      },
+      {
+          "opcode": "DEC",
+          "args": []
+      },
+      {
+          "opcode": "WR",
+          "args": [
+              13
+          ]
+      },
+      {
+          "opcode": "JMP",
+          "args": [
+              18
+          ]
+      },
+      {
+          "opcode": "HLT",
+          "args": []
+      }
+  ]
+
+out_stdout: |
+  source LoC: 26 code instr: 33
+  ============================================================
+  Hello world!
+  instr_counter: 174 ticks: 634
+
+out_log: |
+  INFO - {TICK: 1, ADDR: 0, IP: 16, ACC: 0, Z: 0, N: 0} LD_REL 0
+  INFO - {TICK: 2, ADDR: 0, IP: 16, ACC: 0, Z: 0, N: 0} LD_REL 0
+  INFO - {TICK: 3, ADDR: 0, IP: 16, ACC: 12, Z: 0, N: 0} LD_REL 0
+  INFO - {TICK: 4, ADDR: 0, IP: 17, ACC: 12, Z: 0, N: 0} LD_REL 0
+  INFO - 
+
+  INFO - {TICK: 5, ADDR: 0, IP: 17, ACC: 12, Z: 0, N: 0} WR 13
+  INFO - {TICK: 6, ADDR: 13, IP: 17, ACC: 12, Z: 0, N: 0} WR 13
+  INFO - {TICK: 7, ADDR: 13, IP: 17, ACC: 12, Z: 0, N: 0} WR 13
+  INFO - {TICK: 8, ADDR: 13, IP: 18, ACC: 12, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 9, ADDR: 13, IP: 18, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 10, ADDR: 13, IP: 18, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 11, ADDR: 13, IP: 18, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 12, ADDR: 13, IP: 19, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 13, ADDR: 13, IP: 19, ACC: 12, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 14, ADDR: 15, IP: 19, ACC: 12, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 15, ADDR: 15, IP: 19, ACC: 12, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 16, ADDR: 15, IP: 20, ACC: 12, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 17, ADDR: 15, IP: 20, ACC: 12, Z: 0, N: 0} JE 32
+  INFO - {TICK: 18, ADDR: 15, IP: 20, ACC: 12, Z: 0, N: 0} JE 32
+  INFO - {TICK: 19, ADDR: 15, IP: 21, ACC: 12, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 20, ADDR: 15, IP: 21, ACC: 12, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 21, ADDR: 14, IP: 21, ACC: 12, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 22, ADDR: 14, IP: 21, ACC: 0, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 23, ADDR: 14, IP: 22, ACC: 0, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 24, ADDR: 14, IP: 22, ACC: 0, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 25, ADDR: 14, IP: 22, ACC: 1, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 26, ADDR: 14, IP: 23, ACC: 1, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 27, ADDR: 14, IP: 23, ACC: 1, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 28, ADDR: 1, IP: 23, ACC: 1, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 29, ADDR: 1, IP: 23, ACC: H, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 30, ADDR: 1, IP: 24, ACC: H, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 31, ADDR: 1, IP: 24, ACC: H, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: H
+  INFO - {TICK: 32, ADDR: -1, IP: 24, ACC: H, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 33, ADDR: -1, IP: 24, ACC: H, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 34, ADDR: -1, IP: 25, ACC: H, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 35, ADDR: -1, IP: 25, ACC: H, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 36, ADDR: 14, IP: 25, ACC: H, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 37, ADDR: 14, IP: 25, ACC: 0, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 38, ADDR: 14, IP: 26, ACC: 0, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 39, ADDR: 14, IP: 26, ACC: 0, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 40, ADDR: 14, IP: 26, ACC: 1, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 41, ADDR: 14, IP: 27, ACC: 1, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 42, ADDR: 14, IP: 27, ACC: 1, Z: 0, N: 0} WR 14
+  INFO - {TICK: 43, ADDR: 14, IP: 27, ACC: 1, Z: 0, N: 0} WR 14
+  INFO - {TICK: 44, ADDR: 14, IP: 27, ACC: 1, Z: 0, N: 0} WR 14
+  INFO - {TICK: 45, ADDR: 14, IP: 28, ACC: 1, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 46, ADDR: 14, IP: 28, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 47, ADDR: 13, IP: 28, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 48, ADDR: 13, IP: 28, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 49, ADDR: 13, IP: 29, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 50, ADDR: 13, IP: 29, ACC: 12, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 51, ADDR: 13, IP: 29, ACC: 11, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 52, ADDR: 13, IP: 30, ACC: 11, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 53, ADDR: 13, IP: 30, ACC: 11, Z: 0, N: 0} WR 13
+  INFO - {TICK: 54, ADDR: 13, IP: 30, ACC: 11, Z: 0, N: 0} WR 13
+  INFO - {TICK: 55, ADDR: 13, IP: 30, ACC: 11, Z: 0, N: 0} WR 13
+  INFO - {TICK: 56, ADDR: 13, IP: 31, ACC: 11, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 57, ADDR: 13, IP: 31, ACC: 11, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 58, ADDR: 13, IP: 31, ACC: 11, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 59, ADDR: 13, IP: 18, ACC: 11, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 60, ADDR: 13, IP: 18, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 61, ADDR: 13, IP: 18, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 62, ADDR: 13, IP: 18, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 63, ADDR: 13, IP: 19, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 64, ADDR: 13, IP: 19, ACC: 11, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 65, ADDR: 15, IP: 19, ACC: 11, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 66, ADDR: 15, IP: 19, ACC: 11, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 67, ADDR: 15, IP: 20, ACC: 11, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 68, ADDR: 15, IP: 20, ACC: 11, Z: 0, N: 0} JE 32
+  INFO - {TICK: 69, ADDR: 15, IP: 20, ACC: 11, Z: 0, N: 0} JE 32
+  INFO - {TICK: 70, ADDR: 15, IP: 21, ACC: 11, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 71, ADDR: 15, IP: 21, ACC: 11, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 72, ADDR: 14, IP: 21, ACC: 11, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 73, ADDR: 14, IP: 21, ACC: 1, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 74, ADDR: 14, IP: 22, ACC: 1, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 75, ADDR: 14, IP: 22, ACC: 1, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 76, ADDR: 14, IP: 22, ACC: 2, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 77, ADDR: 14, IP: 23, ACC: 2, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 78, ADDR: 14, IP: 23, ACC: 2, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 79, ADDR: 2, IP: 23, ACC: 2, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 80, ADDR: 2, IP: 23, ACC: e, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 81, ADDR: 2, IP: 24, ACC: e, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 82, ADDR: 2, IP: 24, ACC: e, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: e
+  INFO - {TICK: 83, ADDR: -1, IP: 24, ACC: e, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 84, ADDR: -1, IP: 24, ACC: e, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 85, ADDR: -1, IP: 25, ACC: e, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 86, ADDR: -1, IP: 25, ACC: e, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 87, ADDR: 14, IP: 25, ACC: e, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 88, ADDR: 14, IP: 25, ACC: 1, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 89, ADDR: 14, IP: 26, ACC: 1, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 90, ADDR: 14, IP: 26, ACC: 1, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 91, ADDR: 14, IP: 26, ACC: 2, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 92, ADDR: 14, IP: 27, ACC: 2, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 93, ADDR: 14, IP: 27, ACC: 2, Z: 0, N: 0} WR 14
+  INFO - {TICK: 94, ADDR: 14, IP: 27, ACC: 2, Z: 0, N: 0} WR 14
+  INFO - {TICK: 95, ADDR: 14, IP: 27, ACC: 2, Z: 0, N: 0} WR 14
+  INFO - {TICK: 96, ADDR: 14, IP: 28, ACC: 2, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 97, ADDR: 14, IP: 28, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 98, ADDR: 13, IP: 28, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 99, ADDR: 13, IP: 28, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 100, ADDR: 13, IP: 29, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 101, ADDR: 13, IP: 29, ACC: 11, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 102, ADDR: 13, IP: 29, ACC: 10, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 103, ADDR: 13, IP: 30, ACC: 10, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 104, ADDR: 13, IP: 30, ACC: 10, Z: 0, N: 0} WR 13
+  INFO - {TICK: 105, ADDR: 13, IP: 30, ACC: 10, Z: 0, N: 0} WR 13
+  INFO - {TICK: 106, ADDR: 13, IP: 30, ACC: 10, Z: 0, N: 0} WR 13
+  INFO - {TICK: 107, ADDR: 13, IP: 31, ACC: 10, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 108, ADDR: 13, IP: 31, ACC: 10, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 109, ADDR: 13, IP: 31, ACC: 10, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 110, ADDR: 13, IP: 18, ACC: 10, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 111, ADDR: 13, IP: 18, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 112, ADDR: 13, IP: 18, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 113, ADDR: 13, IP: 18, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 114, ADDR: 13, IP: 19, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 115, ADDR: 13, IP: 19, ACC: 10, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 116, ADDR: 15, IP: 19, ACC: 10, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 117, ADDR: 15, IP: 19, ACC: 10, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 118, ADDR: 15, IP: 20, ACC: 10, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 119, ADDR: 15, IP: 20, ACC: 10, Z: 0, N: 0} JE 32
+  INFO - {TICK: 120, ADDR: 15, IP: 20, ACC: 10, Z: 0, N: 0} JE 32
+  INFO - {TICK: 121, ADDR: 15, IP: 21, ACC: 10, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 122, ADDR: 15, IP: 21, ACC: 10, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 123, ADDR: 14, IP: 21, ACC: 10, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 124, ADDR: 14, IP: 21, ACC: 2, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 125, ADDR: 14, IP: 22, ACC: 2, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 126, ADDR: 14, IP: 22, ACC: 2, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 127, ADDR: 14, IP: 22, ACC: 3, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 128, ADDR: 14, IP: 23, ACC: 3, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 129, ADDR: 14, IP: 23, ACC: 3, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 130, ADDR: 3, IP: 23, ACC: 3, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 131, ADDR: 3, IP: 23, ACC: l, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 132, ADDR: 3, IP: 24, ACC: l, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 133, ADDR: 3, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: l
+  INFO - {TICK: 134, ADDR: -1, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 135, ADDR: -1, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 136, ADDR: -1, IP: 25, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 137, ADDR: -1, IP: 25, ACC: l, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 138, ADDR: 14, IP: 25, ACC: l, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 139, ADDR: 14, IP: 25, ACC: 2, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 140, ADDR: 14, IP: 26, ACC: 2, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 141, ADDR: 14, IP: 26, ACC: 2, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 142, ADDR: 14, IP: 26, ACC: 3, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 143, ADDR: 14, IP: 27, ACC: 3, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 144, ADDR: 14, IP: 27, ACC: 3, Z: 0, N: 0} WR 14
+  INFO - {TICK: 145, ADDR: 14, IP: 27, ACC: 3, Z: 0, N: 0} WR 14
+  INFO - {TICK: 146, ADDR: 14, IP: 27, ACC: 3, Z: 0, N: 0} WR 14
+  INFO - {TICK: 147, ADDR: 14, IP: 28, ACC: 3, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 148, ADDR: 14, IP: 28, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 149, ADDR: 13, IP: 28, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 150, ADDR: 13, IP: 28, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 151, ADDR: 13, IP: 29, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 152, ADDR: 13, IP: 29, ACC: 10, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 153, ADDR: 13, IP: 29, ACC: 9, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 154, ADDR: 13, IP: 30, ACC: 9, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 155, ADDR: 13, IP: 30, ACC: 9, Z: 0, N: 0} WR 13
+  INFO - {TICK: 156, ADDR: 13, IP: 30, ACC: 9, Z: 0, N: 0} WR 13
+  INFO - {TICK: 157, ADDR: 13, IP: 30, ACC: 9, Z: 0, N: 0} WR 13
+  INFO - {TICK: 158, ADDR: 13, IP: 31, ACC: 9, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 159, ADDR: 13, IP: 31, ACC: 9, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 160, ADDR: 13, IP: 31, ACC: 9, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 161, ADDR: 13, IP: 18, ACC: 9, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 162, ADDR: 13, IP: 18, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 163, ADDR: 13, IP: 18, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 164, ADDR: 13, IP: 18, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 165, ADDR: 13, IP: 19, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 166, ADDR: 13, IP: 19, ACC: 9, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 167, ADDR: 15, IP: 19, ACC: 9, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 168, ADDR: 15, IP: 19, ACC: 9, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 169, ADDR: 15, IP: 20, ACC: 9, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 170, ADDR: 15, IP: 20, ACC: 9, Z: 0, N: 0} JE 32
+  INFO - {TICK: 171, ADDR: 15, IP: 20, ACC: 9, Z: 0, N: 0} JE 32
+  INFO - {TICK: 172, ADDR: 15, IP: 21, ACC: 9, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 173, ADDR: 15, IP: 21, ACC: 9, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 174, ADDR: 14, IP: 21, ACC: 9, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 175, ADDR: 14, IP: 21, ACC: 3, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 176, ADDR: 14, IP: 22, ACC: 3, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 177, ADDR: 14, IP: 22, ACC: 3, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 178, ADDR: 14, IP: 22, ACC: 4, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 179, ADDR: 14, IP: 23, ACC: 4, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 180, ADDR: 14, IP: 23, ACC: 4, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 181, ADDR: 4, IP: 23, ACC: 4, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 182, ADDR: 4, IP: 23, ACC: l, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 183, ADDR: 4, IP: 24, ACC: l, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 184, ADDR: 4, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: l
+  INFO - {TICK: 185, ADDR: -1, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 186, ADDR: -1, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 187, ADDR: -1, IP: 25, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 188, ADDR: -1, IP: 25, ACC: l, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 189, ADDR: 14, IP: 25, ACC: l, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 190, ADDR: 14, IP: 25, ACC: 3, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 191, ADDR: 14, IP: 26, ACC: 3, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 192, ADDR: 14, IP: 26, ACC: 3, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 193, ADDR: 14, IP: 26, ACC: 4, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 194, ADDR: 14, IP: 27, ACC: 4, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 195, ADDR: 14, IP: 27, ACC: 4, Z: 0, N: 0} WR 14
+  INFO - {TICK: 196, ADDR: 14, IP: 27, ACC: 4, Z: 0, N: 0} WR 14
+  INFO - {TICK: 197, ADDR: 14, IP: 27, ACC: 4, Z: 0, N: 0} WR 14
+  INFO - {TICK: 198, ADDR: 14, IP: 28, ACC: 4, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 199, ADDR: 14, IP: 28, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 200, ADDR: 13, IP: 28, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 201, ADDR: 13, IP: 28, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 202, ADDR: 13, IP: 29, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 203, ADDR: 13, IP: 29, ACC: 9, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 204, ADDR: 13, IP: 29, ACC: 8, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 205, ADDR: 13, IP: 30, ACC: 8, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 206, ADDR: 13, IP: 30, ACC: 8, Z: 0, N: 0} WR 13
+  INFO - {TICK: 207, ADDR: 13, IP: 30, ACC: 8, Z: 0, N: 0} WR 13
+  INFO - {TICK: 208, ADDR: 13, IP: 30, ACC: 8, Z: 0, N: 0} WR 13
+  INFO - {TICK: 209, ADDR: 13, IP: 31, ACC: 8, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 210, ADDR: 13, IP: 31, ACC: 8, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 211, ADDR: 13, IP: 31, ACC: 8, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 212, ADDR: 13, IP: 18, ACC: 8, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 213, ADDR: 13, IP: 18, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 214, ADDR: 13, IP: 18, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 215, ADDR: 13, IP: 18, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 216, ADDR: 13, IP: 19, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 217, ADDR: 13, IP: 19, ACC: 8, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 218, ADDR: 15, IP: 19, ACC: 8, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 219, ADDR: 15, IP: 19, ACC: 8, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 220, ADDR: 15, IP: 20, ACC: 8, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 221, ADDR: 15, IP: 20, ACC: 8, Z: 0, N: 0} JE 32
+  INFO - {TICK: 222, ADDR: 15, IP: 20, ACC: 8, Z: 0, N: 0} JE 32
+  INFO - {TICK: 223, ADDR: 15, IP: 21, ACC: 8, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 224, ADDR: 15, IP: 21, ACC: 8, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 225, ADDR: 14, IP: 21, ACC: 8, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 226, ADDR: 14, IP: 21, ACC: 4, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 227, ADDR: 14, IP: 22, ACC: 4, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 228, ADDR: 14, IP: 22, ACC: 4, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 229, ADDR: 14, IP: 22, ACC: 5, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 230, ADDR: 14, IP: 23, ACC: 5, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 231, ADDR: 14, IP: 23, ACC: 5, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 232, ADDR: 5, IP: 23, ACC: 5, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 233, ADDR: 5, IP: 23, ACC: o, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 234, ADDR: 5, IP: 24, ACC: o, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 235, ADDR: 5, IP: 24, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: o
+  INFO - {TICK: 236, ADDR: -1, IP: 24, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 237, ADDR: -1, IP: 24, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 238, ADDR: -1, IP: 25, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 239, ADDR: -1, IP: 25, ACC: o, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 240, ADDR: 14, IP: 25, ACC: o, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 241, ADDR: 14, IP: 25, ACC: 4, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 242, ADDR: 14, IP: 26, ACC: 4, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 243, ADDR: 14, IP: 26, ACC: 4, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 244, ADDR: 14, IP: 26, ACC: 5, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 245, ADDR: 14, IP: 27, ACC: 5, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 246, ADDR: 14, IP: 27, ACC: 5, Z: 0, N: 0} WR 14
+  INFO - {TICK: 247, ADDR: 14, IP: 27, ACC: 5, Z: 0, N: 0} WR 14
+  INFO - {TICK: 248, ADDR: 14, IP: 27, ACC: 5, Z: 0, N: 0} WR 14
+  INFO - {TICK: 249, ADDR: 14, IP: 28, ACC: 5, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 250, ADDR: 14, IP: 28, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 251, ADDR: 13, IP: 28, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 252, ADDR: 13, IP: 28, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 253, ADDR: 13, IP: 29, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 254, ADDR: 13, IP: 29, ACC: 8, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 255, ADDR: 13, IP: 29, ACC: 7, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 256, ADDR: 13, IP: 30, ACC: 7, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 257, ADDR: 13, IP: 30, ACC: 7, Z: 0, N: 0} WR 13
+  INFO - {TICK: 258, ADDR: 13, IP: 30, ACC: 7, Z: 0, N: 0} WR 13
+  INFO - {TICK: 259, ADDR: 13, IP: 30, ACC: 7, Z: 0, N: 0} WR 13
+  INFO - {TICK: 260, ADDR: 13, IP: 31, ACC: 7, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 261, ADDR: 13, IP: 31, ACC: 7, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 262, ADDR: 13, IP: 31, ACC: 7, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 263, ADDR: 13, IP: 18, ACC: 7, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 264, ADDR: 13, IP: 18, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 265, ADDR: 13, IP: 18, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 266, ADDR: 13, IP: 18, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 267, ADDR: 13, IP: 19, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 268, ADDR: 13, IP: 19, ACC: 7, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 269, ADDR: 15, IP: 19, ACC: 7, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 270, ADDR: 15, IP: 19, ACC: 7, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 271, ADDR: 15, IP: 20, ACC: 7, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 272, ADDR: 15, IP: 20, ACC: 7, Z: 0, N: 0} JE 32
+  INFO - {TICK: 273, ADDR: 15, IP: 20, ACC: 7, Z: 0, N: 0} JE 32
+  INFO - {TICK: 274, ADDR: 15, IP: 21, ACC: 7, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 275, ADDR: 15, IP: 21, ACC: 7, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 276, ADDR: 14, IP: 21, ACC: 7, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 277, ADDR: 14, IP: 21, ACC: 5, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 278, ADDR: 14, IP: 22, ACC: 5, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 279, ADDR: 14, IP: 22, ACC: 5, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 280, ADDR: 14, IP: 22, ACC: 6, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 281, ADDR: 14, IP: 23, ACC: 6, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 282, ADDR: 14, IP: 23, ACC: 6, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 283, ADDR: 6, IP: 23, ACC: 6, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 284, ADDR: 6, IP: 23, ACC:  , Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 285, ADDR: 6, IP: 24, ACC:  , Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 286, ADDR: 6, IP: 24, ACC:  , Z: 0, N: 0} OUT -1
+  INFO - OUTPUT:  
+  INFO - {TICK: 287, ADDR: -1, IP: 24, ACC:  , Z: 0, N: 0} OUT -1
+  INFO - {TICK: 288, ADDR: -1, IP: 24, ACC:  , Z: 0, N: 0} OUT -1
+  INFO - {TICK: 289, ADDR: -1, IP: 25, ACC:  , Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 290, ADDR: -1, IP: 25, ACC:  , Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 291, ADDR: 14, IP: 25, ACC:  , Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 292, ADDR: 14, IP: 25, ACC: 5, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 293, ADDR: 14, IP: 26, ACC: 5, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 294, ADDR: 14, IP: 26, ACC: 5, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 295, ADDR: 14, IP: 26, ACC: 6, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 296, ADDR: 14, IP: 27, ACC: 6, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 297, ADDR: 14, IP: 27, ACC: 6, Z: 0, N: 0} WR 14
+  INFO - {TICK: 298, ADDR: 14, IP: 27, ACC: 6, Z: 0, N: 0} WR 14
+  INFO - {TICK: 299, ADDR: 14, IP: 27, ACC: 6, Z: 0, N: 0} WR 14
+  INFO - {TICK: 300, ADDR: 14, IP: 28, ACC: 6, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 301, ADDR: 14, IP: 28, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 302, ADDR: 13, IP: 28, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 303, ADDR: 13, IP: 28, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 304, ADDR: 13, IP: 29, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 305, ADDR: 13, IP: 29, ACC: 7, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 306, ADDR: 13, IP: 29, ACC: 6, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 307, ADDR: 13, IP: 30, ACC: 6, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 308, ADDR: 13, IP: 30, ACC: 6, Z: 0, N: 0} WR 13
+  INFO - {TICK: 309, ADDR: 13, IP: 30, ACC: 6, Z: 0, N: 0} WR 13
+  INFO - {TICK: 310, ADDR: 13, IP: 30, ACC: 6, Z: 0, N: 0} WR 13
+  INFO - {TICK: 311, ADDR: 13, IP: 31, ACC: 6, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 312, ADDR: 13, IP: 31, ACC: 6, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 313, ADDR: 13, IP: 31, ACC: 6, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 314, ADDR: 13, IP: 18, ACC: 6, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 315, ADDR: 13, IP: 18, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 316, ADDR: 13, IP: 18, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 317, ADDR: 13, IP: 18, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 318, ADDR: 13, IP: 19, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 319, ADDR: 13, IP: 19, ACC: 6, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 320, ADDR: 15, IP: 19, ACC: 6, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 321, ADDR: 15, IP: 19, ACC: 6, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 322, ADDR: 15, IP: 20, ACC: 6, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 323, ADDR: 15, IP: 20, ACC: 6, Z: 0, N: 0} JE 32
+  INFO - {TICK: 324, ADDR: 15, IP: 20, ACC: 6, Z: 0, N: 0} JE 32
+  INFO - {TICK: 325, ADDR: 15, IP: 21, ACC: 6, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 326, ADDR: 15, IP: 21, ACC: 6, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 327, ADDR: 14, IP: 21, ACC: 6, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 328, ADDR: 14, IP: 21, ACC: 6, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 329, ADDR: 14, IP: 22, ACC: 6, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 330, ADDR: 14, IP: 22, ACC: 6, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 331, ADDR: 14, IP: 22, ACC: 7, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 332, ADDR: 14, IP: 23, ACC: 7, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 333, ADDR: 14, IP: 23, ACC: 7, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 334, ADDR: 7, IP: 23, ACC: 7, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 335, ADDR: 7, IP: 23, ACC: w, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 336, ADDR: 7, IP: 24, ACC: w, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 337, ADDR: 7, IP: 24, ACC: w, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: w
+  INFO - {TICK: 338, ADDR: -1, IP: 24, ACC: w, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 339, ADDR: -1, IP: 24, ACC: w, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 340, ADDR: -1, IP: 25, ACC: w, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 341, ADDR: -1, IP: 25, ACC: w, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 342, ADDR: 14, IP: 25, ACC: w, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 343, ADDR: 14, IP: 25, ACC: 6, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 344, ADDR: 14, IP: 26, ACC: 6, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 345, ADDR: 14, IP: 26, ACC: 6, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 346, ADDR: 14, IP: 26, ACC: 7, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 347, ADDR: 14, IP: 27, ACC: 7, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 348, ADDR: 14, IP: 27, ACC: 7, Z: 0, N: 0} WR 14
+  INFO - {TICK: 349, ADDR: 14, IP: 27, ACC: 7, Z: 0, N: 0} WR 14
+  INFO - {TICK: 350, ADDR: 14, IP: 27, ACC: 7, Z: 0, N: 0} WR 14
+  INFO - {TICK: 351, ADDR: 14, IP: 28, ACC: 7, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 352, ADDR: 14, IP: 28, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 353, ADDR: 13, IP: 28, ACC: 7, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 354, ADDR: 13, IP: 28, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 355, ADDR: 13, IP: 29, ACC: 6, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 356, ADDR: 13, IP: 29, ACC: 6, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 357, ADDR: 13, IP: 29, ACC: 5, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 358, ADDR: 13, IP: 30, ACC: 5, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 359, ADDR: 13, IP: 30, ACC: 5, Z: 0, N: 0} WR 13
+  INFO - {TICK: 360, ADDR: 13, IP: 30, ACC: 5, Z: 0, N: 0} WR 13
+  INFO - {TICK: 361, ADDR: 13, IP: 30, ACC: 5, Z: 0, N: 0} WR 13
+  INFO - {TICK: 362, ADDR: 13, IP: 31, ACC: 5, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 363, ADDR: 13, IP: 31, ACC: 5, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 364, ADDR: 13, IP: 31, ACC: 5, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 365, ADDR: 13, IP: 18, ACC: 5, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 366, ADDR: 13, IP: 18, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 367, ADDR: 13, IP: 18, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 368, ADDR: 13, IP: 18, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 369, ADDR: 13, IP: 19, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 370, ADDR: 13, IP: 19, ACC: 5, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 371, ADDR: 15, IP: 19, ACC: 5, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 372, ADDR: 15, IP: 19, ACC: 5, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 373, ADDR: 15, IP: 20, ACC: 5, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 374, ADDR: 15, IP: 20, ACC: 5, Z: 0, N: 0} JE 32
+  INFO - {TICK: 375, ADDR: 15, IP: 20, ACC: 5, Z: 0, N: 0} JE 32
+  INFO - {TICK: 376, ADDR: 15, IP: 21, ACC: 5, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 377, ADDR: 15, IP: 21, ACC: 5, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 378, ADDR: 14, IP: 21, ACC: 5, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 379, ADDR: 14, IP: 21, ACC: 7, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 380, ADDR: 14, IP: 22, ACC: 7, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 381, ADDR: 14, IP: 22, ACC: 7, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 382, ADDR: 14, IP: 22, ACC: 8, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 383, ADDR: 14, IP: 23, ACC: 8, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 384, ADDR: 14, IP: 23, ACC: 8, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 385, ADDR: 8, IP: 23, ACC: 8, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 386, ADDR: 8, IP: 23, ACC: o, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 387, ADDR: 8, IP: 24, ACC: o, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 388, ADDR: 8, IP: 24, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: o
+  INFO - {TICK: 389, ADDR: -1, IP: 24, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 390, ADDR: -1, IP: 24, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 391, ADDR: -1, IP: 25, ACC: o, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 392, ADDR: -1, IP: 25, ACC: o, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 393, ADDR: 14, IP: 25, ACC: o, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 394, ADDR: 14, IP: 25, ACC: 7, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 395, ADDR: 14, IP: 26, ACC: 7, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 396, ADDR: 14, IP: 26, ACC: 7, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 397, ADDR: 14, IP: 26, ACC: 8, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 398, ADDR: 14, IP: 27, ACC: 8, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 399, ADDR: 14, IP: 27, ACC: 8, Z: 0, N: 0} WR 14
+  INFO - {TICK: 400, ADDR: 14, IP: 27, ACC: 8, Z: 0, N: 0} WR 14
+  INFO - {TICK: 401, ADDR: 14, IP: 27, ACC: 8, Z: 0, N: 0} WR 14
+  INFO - {TICK: 402, ADDR: 14, IP: 28, ACC: 8, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 403, ADDR: 14, IP: 28, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 404, ADDR: 13, IP: 28, ACC: 8, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 405, ADDR: 13, IP: 28, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 406, ADDR: 13, IP: 29, ACC: 5, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 407, ADDR: 13, IP: 29, ACC: 5, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 408, ADDR: 13, IP: 29, ACC: 4, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 409, ADDR: 13, IP: 30, ACC: 4, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 410, ADDR: 13, IP: 30, ACC: 4, Z: 0, N: 0} WR 13
+  INFO - {TICK: 411, ADDR: 13, IP: 30, ACC: 4, Z: 0, N: 0} WR 13
+  INFO - {TICK: 412, ADDR: 13, IP: 30, ACC: 4, Z: 0, N: 0} WR 13
+  INFO - {TICK: 413, ADDR: 13, IP: 31, ACC: 4, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 414, ADDR: 13, IP: 31, ACC: 4, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 415, ADDR: 13, IP: 31, ACC: 4, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 416, ADDR: 13, IP: 18, ACC: 4, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 417, ADDR: 13, IP: 18, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 418, ADDR: 13, IP: 18, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 419, ADDR: 13, IP: 18, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 420, ADDR: 13, IP: 19, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 421, ADDR: 13, IP: 19, ACC: 4, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 422, ADDR: 15, IP: 19, ACC: 4, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 423, ADDR: 15, IP: 19, ACC: 4, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 424, ADDR: 15, IP: 20, ACC: 4, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 425, ADDR: 15, IP: 20, ACC: 4, Z: 0, N: 0} JE 32
+  INFO - {TICK: 426, ADDR: 15, IP: 20, ACC: 4, Z: 0, N: 0} JE 32
+  INFO - {TICK: 427, ADDR: 15, IP: 21, ACC: 4, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 428, ADDR: 15, IP: 21, ACC: 4, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 429, ADDR: 14, IP: 21, ACC: 4, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 430, ADDR: 14, IP: 21, ACC: 8, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 431, ADDR: 14, IP: 22, ACC: 8, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 432, ADDR: 14, IP: 22, ACC: 8, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 433, ADDR: 14, IP: 22, ACC: 9, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 434, ADDR: 14, IP: 23, ACC: 9, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 435, ADDR: 14, IP: 23, ACC: 9, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 436, ADDR: 9, IP: 23, ACC: 9, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 437, ADDR: 9, IP: 23, ACC: r, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 438, ADDR: 9, IP: 24, ACC: r, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 439, ADDR: 9, IP: 24, ACC: r, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: r
+  INFO - {TICK: 440, ADDR: -1, IP: 24, ACC: r, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 441, ADDR: -1, IP: 24, ACC: r, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 442, ADDR: -1, IP: 25, ACC: r, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 443, ADDR: -1, IP: 25, ACC: r, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 444, ADDR: 14, IP: 25, ACC: r, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 445, ADDR: 14, IP: 25, ACC: 8, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 446, ADDR: 14, IP: 26, ACC: 8, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 447, ADDR: 14, IP: 26, ACC: 8, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 448, ADDR: 14, IP: 26, ACC: 9, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 449, ADDR: 14, IP: 27, ACC: 9, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 450, ADDR: 14, IP: 27, ACC: 9, Z: 0, N: 0} WR 14
+  INFO - {TICK: 451, ADDR: 14, IP: 27, ACC: 9, Z: 0, N: 0} WR 14
+  INFO - {TICK: 452, ADDR: 14, IP: 27, ACC: 9, Z: 0, N: 0} WR 14
+  INFO - {TICK: 453, ADDR: 14, IP: 28, ACC: 9, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 454, ADDR: 14, IP: 28, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 455, ADDR: 13, IP: 28, ACC: 9, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 456, ADDR: 13, IP: 28, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 457, ADDR: 13, IP: 29, ACC: 4, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 458, ADDR: 13, IP: 29, ACC: 4, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 459, ADDR: 13, IP: 29, ACC: 3, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 460, ADDR: 13, IP: 30, ACC: 3, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 461, ADDR: 13, IP: 30, ACC: 3, Z: 0, N: 0} WR 13
+  INFO - {TICK: 462, ADDR: 13, IP: 30, ACC: 3, Z: 0, N: 0} WR 13
+  INFO - {TICK: 463, ADDR: 13, IP: 30, ACC: 3, Z: 0, N: 0} WR 13
+  INFO - {TICK: 464, ADDR: 13, IP: 31, ACC: 3, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 465, ADDR: 13, IP: 31, ACC: 3, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 466, ADDR: 13, IP: 31, ACC: 3, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 467, ADDR: 13, IP: 18, ACC: 3, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 468, ADDR: 13, IP: 18, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 469, ADDR: 13, IP: 18, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 470, ADDR: 13, IP: 18, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 471, ADDR: 13, IP: 19, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 472, ADDR: 13, IP: 19, ACC: 3, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 473, ADDR: 15, IP: 19, ACC: 3, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 474, ADDR: 15, IP: 19, ACC: 3, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 475, ADDR: 15, IP: 20, ACC: 3, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 476, ADDR: 15, IP: 20, ACC: 3, Z: 0, N: 0} JE 32
+  INFO - {TICK: 477, ADDR: 15, IP: 20, ACC: 3, Z: 0, N: 0} JE 32
+  INFO - {TICK: 478, ADDR: 15, IP: 21, ACC: 3, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 479, ADDR: 15, IP: 21, ACC: 3, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 480, ADDR: 14, IP: 21, ACC: 3, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 481, ADDR: 14, IP: 21, ACC: 9, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 482, ADDR: 14, IP: 22, ACC: 9, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 483, ADDR: 14, IP: 22, ACC: 9, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 484, ADDR: 14, IP: 22, ACC: 10, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 485, ADDR: 14, IP: 23, ACC: 10, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 486, ADDR: 14, IP: 23, ACC: 10, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 487, ADDR: 10, IP: 23, ACC: 10, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 488, ADDR: 10, IP: 23, ACC: l, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 489, ADDR: 10, IP: 24, ACC: l, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 490, ADDR: 10, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: l
+  INFO - {TICK: 491, ADDR: -1, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 492, ADDR: -1, IP: 24, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 493, ADDR: -1, IP: 25, ACC: l, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 494, ADDR: -1, IP: 25, ACC: l, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 495, ADDR: 14, IP: 25, ACC: l, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 496, ADDR: 14, IP: 25, ACC: 9, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 497, ADDR: 14, IP: 26, ACC: 9, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 498, ADDR: 14, IP: 26, ACC: 9, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 499, ADDR: 14, IP: 26, ACC: 10, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 500, ADDR: 14, IP: 27, ACC: 10, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 501, ADDR: 14, IP: 27, ACC: 10, Z: 0, N: 0} WR 14
+  INFO - {TICK: 502, ADDR: 14, IP: 27, ACC: 10, Z: 0, N: 0} WR 14
+  INFO - {TICK: 503, ADDR: 14, IP: 27, ACC: 10, Z: 0, N: 0} WR 14
+  INFO - {TICK: 504, ADDR: 14, IP: 28, ACC: 10, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 505, ADDR: 14, IP: 28, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 506, ADDR: 13, IP: 28, ACC: 10, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 507, ADDR: 13, IP: 28, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 508, ADDR: 13, IP: 29, ACC: 3, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 509, ADDR: 13, IP: 29, ACC: 3, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 510, ADDR: 13, IP: 29, ACC: 2, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 511, ADDR: 13, IP: 30, ACC: 2, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 512, ADDR: 13, IP: 30, ACC: 2, Z: 0, N: 0} WR 13
+  INFO - {TICK: 513, ADDR: 13, IP: 30, ACC: 2, Z: 0, N: 0} WR 13
+  INFO - {TICK: 514, ADDR: 13, IP: 30, ACC: 2, Z: 0, N: 0} WR 13
+  INFO - {TICK: 515, ADDR: 13, IP: 31, ACC: 2, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 516, ADDR: 13, IP: 31, ACC: 2, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 517, ADDR: 13, IP: 31, ACC: 2, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 518, ADDR: 13, IP: 18, ACC: 2, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 519, ADDR: 13, IP: 18, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 520, ADDR: 13, IP: 18, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 521, ADDR: 13, IP: 18, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 522, ADDR: 13, IP: 19, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 523, ADDR: 13, IP: 19, ACC: 2, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 524, ADDR: 15, IP: 19, ACC: 2, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 525, ADDR: 15, IP: 19, ACC: 2, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 526, ADDR: 15, IP: 20, ACC: 2, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 527, ADDR: 15, IP: 20, ACC: 2, Z: 0, N: 0} JE 32
+  INFO - {TICK: 528, ADDR: 15, IP: 20, ACC: 2, Z: 0, N: 0} JE 32
+  INFO - {TICK: 529, ADDR: 15, IP: 21, ACC: 2, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 530, ADDR: 15, IP: 21, ACC: 2, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 531, ADDR: 14, IP: 21, ACC: 2, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 532, ADDR: 14, IP: 21, ACC: 10, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 533, ADDR: 14, IP: 22, ACC: 10, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 534, ADDR: 14, IP: 22, ACC: 10, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 535, ADDR: 14, IP: 22, ACC: 11, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 536, ADDR: 14, IP: 23, ACC: 11, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 537, ADDR: 14, IP: 23, ACC: 11, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 538, ADDR: 11, IP: 23, ACC: 11, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 539, ADDR: 11, IP: 23, ACC: d, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 540, ADDR: 11, IP: 24, ACC: d, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 541, ADDR: 11, IP: 24, ACC: d, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: d
+  INFO - {TICK: 542, ADDR: -1, IP: 24, ACC: d, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 543, ADDR: -1, IP: 24, ACC: d, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 544, ADDR: -1, IP: 25, ACC: d, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 545, ADDR: -1, IP: 25, ACC: d, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 546, ADDR: 14, IP: 25, ACC: d, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 547, ADDR: 14, IP: 25, ACC: 10, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 548, ADDR: 14, IP: 26, ACC: 10, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 549, ADDR: 14, IP: 26, ACC: 10, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 550, ADDR: 14, IP: 26, ACC: 11, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 551, ADDR: 14, IP: 27, ACC: 11, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 552, ADDR: 14, IP: 27, ACC: 11, Z: 0, N: 0} WR 14
+  INFO - {TICK: 553, ADDR: 14, IP: 27, ACC: 11, Z: 0, N: 0} WR 14
+  INFO - {TICK: 554, ADDR: 14, IP: 27, ACC: 11, Z: 0, N: 0} WR 14
+  INFO - {TICK: 555, ADDR: 14, IP: 28, ACC: 11, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 556, ADDR: 14, IP: 28, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 557, ADDR: 13, IP: 28, ACC: 11, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 558, ADDR: 13, IP: 28, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 559, ADDR: 13, IP: 29, ACC: 2, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 560, ADDR: 13, IP: 29, ACC: 2, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 561, ADDR: 13, IP: 29, ACC: 1, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 562, ADDR: 13, IP: 30, ACC: 1, Z: 0, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 563, ADDR: 13, IP: 30, ACC: 1, Z: 0, N: 0} WR 13
+  INFO - {TICK: 564, ADDR: 13, IP: 30, ACC: 1, Z: 0, N: 0} WR 13
+  INFO - {TICK: 565, ADDR: 13, IP: 30, ACC: 1, Z: 0, N: 0} WR 13
+  INFO - {TICK: 566, ADDR: 13, IP: 31, ACC: 1, Z: 0, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 567, ADDR: 13, IP: 31, ACC: 1, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 568, ADDR: 13, IP: 31, ACC: 1, Z: 0, N: 0} JMP 18
+  INFO - {TICK: 569, ADDR: 13, IP: 18, ACC: 1, Z: 0, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 570, ADDR: 13, IP: 18, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 571, ADDR: 13, IP: 18, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 572, ADDR: 13, IP: 18, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 573, ADDR: 13, IP: 19, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 574, ADDR: 13, IP: 19, ACC: 1, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 575, ADDR: 15, IP: 19, ACC: 1, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 576, ADDR: 15, IP: 19, ACC: 1, Z: 0, N: 0} CMP 15
+  INFO - {TICK: 577, ADDR: 15, IP: 20, ACC: 1, Z: 0, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 578, ADDR: 15, IP: 20, ACC: 1, Z: 0, N: 0} JE 32
+  INFO - {TICK: 579, ADDR: 15, IP: 20, ACC: 1, Z: 0, N: 0} JE 32
+  INFO - {TICK: 580, ADDR: 15, IP: 21, ACC: 1, Z: 0, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 581, ADDR: 15, IP: 21, ACC: 1, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 582, ADDR: 14, IP: 21, ACC: 1, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 583, ADDR: 14, IP: 21, ACC: 11, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 584, ADDR: 14, IP: 22, ACC: 11, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 585, ADDR: 14, IP: 22, ACC: 11, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 586, ADDR: 14, IP: 22, ACC: 12, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 587, ADDR: 14, IP: 23, ACC: 12, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 588, ADDR: 14, IP: 23, ACC: 12, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 589, ADDR: 12, IP: 23, ACC: 12, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 590, ADDR: 12, IP: 23, ACC: !, Z: 0, N: 0} LD_REL AC
+  INFO - {TICK: 591, ADDR: 12, IP: 24, ACC: !, Z: 0, N: 0} LD_REL AC
+  INFO - 
+
+  INFO - {TICK: 592, ADDR: 12, IP: 24, ACC: !, Z: 0, N: 0} OUT -1
+  INFO - OUTPUT: !
+  INFO - {TICK: 593, ADDR: -1, IP: 24, ACC: !, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 594, ADDR: -1, IP: 24, ACC: !, Z: 0, N: 0} OUT -1
+  INFO - {TICK: 595, ADDR: -1, IP: 25, ACC: !, Z: 0, N: 0} OUT -1
+  INFO - 
+
+  INFO - {TICK: 596, ADDR: -1, IP: 25, ACC: !, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 597, ADDR: 14, IP: 25, ACC: !, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 598, ADDR: 14, IP: 25, ACC: 11, Z: 0, N: 0} LD_REL 14
+  INFO - {TICK: 599, ADDR: 14, IP: 26, ACC: 11, Z: 0, N: 0} LD_REL 14
+  INFO - 
+
+  INFO - {TICK: 600, ADDR: 14, IP: 26, ACC: 11, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 601, ADDR: 14, IP: 26, ACC: 12, Z: 0, N: 0} INC no arg
+  INFO - {TICK: 602, ADDR: 14, IP: 27, ACC: 12, Z: 0, N: 0} INC no arg
+  INFO - 
+
+  INFO - {TICK: 603, ADDR: 14, IP: 27, ACC: 12, Z: 0, N: 0} WR 14
+  INFO - {TICK: 604, ADDR: 14, IP: 27, ACC: 12, Z: 0, N: 0} WR 14
+  INFO - {TICK: 605, ADDR: 14, IP: 27, ACC: 12, Z: 0, N: 0} WR 14
+  INFO - {TICK: 606, ADDR: 14, IP: 28, ACC: 12, Z: 0, N: 0} WR 14
+  INFO - 
+
+  INFO - {TICK: 607, ADDR: 14, IP: 28, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 608, ADDR: 13, IP: 28, ACC: 12, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 609, ADDR: 13, IP: 28, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - {TICK: 610, ADDR: 13, IP: 29, ACC: 1, Z: 0, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 611, ADDR: 13, IP: 29, ACC: 1, Z: 0, N: 0} DEC no arg
+  INFO - {TICK: 612, ADDR: 13, IP: 29, ACC: 0, Z: 1, N: 0} DEC no arg
+  INFO - {TICK: 613, ADDR: 13, IP: 30, ACC: 0, Z: 1, N: 0} DEC no arg
+  INFO - 
+
+  INFO - {TICK: 614, ADDR: 13, IP: 30, ACC: 0, Z: 1, N: 0} WR 13
+  INFO - {TICK: 615, ADDR: 13, IP: 30, ACC: 0, Z: 1, N: 0} WR 13
+  INFO - {TICK: 616, ADDR: 13, IP: 30, ACC: 0, Z: 1, N: 0} WR 13
+  INFO - {TICK: 617, ADDR: 13, IP: 31, ACC: 0, Z: 1, N: 0} WR 13
+  INFO - 
+
+  INFO - {TICK: 618, ADDR: 13, IP: 31, ACC: 0, Z: 1, N: 0} JMP 18
+  INFO - {TICK: 619, ADDR: 13, IP: 31, ACC: 0, Z: 1, N: 0} JMP 18
+  INFO - {TICK: 620, ADDR: 13, IP: 18, ACC: 0, Z: 1, N: 0} JMP 18
+  INFO - 
+
+  INFO - {TICK: 621, ADDR: 13, IP: 18, ACC: 0, Z: 1, N: 0} LD_REL 13
+  INFO - {TICK: 622, ADDR: 13, IP: 18, ACC: 0, Z: 1, N: 0} LD_REL 13
+  INFO - {TICK: 623, ADDR: 13, IP: 18, ACC: 0, Z: 1, N: 0} LD_REL 13
+  INFO - {TICK: 624, ADDR: 13, IP: 19, ACC: 0, Z: 1, N: 0} LD_REL 13
+  INFO - 
+
+  INFO - {TICK: 625, ADDR: 13, IP: 19, ACC: 0, Z: 1, N: 0} CMP 15
+  INFO - {TICK: 626, ADDR: 15, IP: 19, ACC: 0, Z: 1, N: 0} CMP 15
+  INFO - {TICK: 627, ADDR: 15, IP: 19, ACC: 0, Z: 1, N: 0} CMP 15
+  INFO - {TICK: 628, ADDR: 15, IP: 20, ACC: 0, Z: 1, N: 0} CMP 15
+  INFO - 
+
+  INFO - {TICK: 629, ADDR: 15, IP: 20, ACC: 0, Z: 1, N: 0} JE 32
+  INFO - {TICK: 630, ADDR: 15, IP: 20, ACC: 0, Z: 1, N: 0} JE 32
+  INFO - {TICK: 631, ADDR: 15, IP: 32, ACC: 0, Z: 1, N: 0} JE 32
+  INFO - 
+
+  INFO - {TICK: 632, ADDR: 15, IP: 32, ACC: 0, Z: 1, N: 0} HLT no arg
+  INFO - {TICK: 633, ADDR: 15, IP: 32, ACC: 0, Z: 1, N: 0} HLT no arg

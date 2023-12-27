@@ -1,10 +1,13 @@
 import logging
 import re
 import sys
+from enum import Enum
 
 from isa import Opcode, read_code
-from machine1 import REGS_COUNT
-from translator import VARS_SEG_SIZE
+from utils import REGS_COUNT
+
+VARS_START_POS = 100
+STR_START_POS = 50
 
 
 class DataPath:
@@ -12,9 +15,9 @@ class DataPath:
         assert memory_size > 0, "Memory size should be non-zero"
         self.memory_size = memory_size
 
-        self.instr_addr = 0
+        self.IR = 0
         self.data_addr = 0
-        self.data_address = VARS_SEG_SIZE
+        self.data_address = VARS_START_POS
 
         self.memory = mem
         self.input_buffer = input_buffer
@@ -98,7 +101,7 @@ class DataPath:
     def sel_addr_src(self, src):
         match src:
             case 0:
-                self.data_address = self.instr_addr
+                self.data_address = self.IR
             case 1:
                 self.data_address = self.data_addr
             case 2:
@@ -132,11 +135,68 @@ class DataPath:
                 self.output_buffer.append(symbol)
 
 
+class MC_Unit:
+    def __init__(self):
+        self.mc_mem = []
+        self.opcode_mapping = {
+            Opcode.VAR: 0b00000000,
+            Opcode.JMP: 0b00000001,
+            Opcode.JMPR: 0b00000010,
+            Opcode.HLT: 0b00000011,
+            Opcode.JNE: 0b00000100,
+            Opcode.JE: 0b00000101,
+            Opcode.CMP: 0b00000110,
+            Opcode.PRINT: 0b00000111,
+            Opcode.NOP: 0b00001000,
+            Opcode.READ: 0b00001001,
+            Opcode.PRINTSTR: 0b00001010,
+            Opcode.JLE: 0b00001011,
+            Opcode.JGE: 0b00001100,
+            Opcode.PRINTC: 0b00001101,
+            Opcode.ADD: 0b00001110,
+            Opcode.SUB: 0b00001111,
+            Opcode.MUL: 0b00010000,
+            Opcode.DEV: 0b00010001,
+            Opcode.MOD: 0b00010010,
+            Opcode.MOV: 0b00010011
+        }
+
+    def execute(self,instruction):
+        # Эта операция выполняет "битовое И" (&) между значением инструкции и маской 0xFF000000. Маска содержит единицы в старших байтах и нули в младших байтах. Это оставляет только старший байт значения инструкции.
+        opcode = (instruction & 0xFF000000) >> 24
+
+        for key, value in self.opcode_mapping.items():
+            if value == opcode:
+                if key == Opcode.VAR:
+                    # Обработка инструкции VAR
+                    print("Processing VAR instruction")
+                    # Дополнительная обработка для каждой инструкции
+
+                elif key == Opcode.JMP:
+                    # Обработка инструкции JMP
+                    print("Processing JMP instruction")
+                    # Дополнительная обработка для каждой инструкции
+
+                # Добавьте обработку других инструкций
+
+                else:
+                    print(f"Unhandled instruction: {key}")
+
+                return
+
+        print("Unknown opcode")
+
+
+
+
 class ControlUnit:
+
     def __init__(self, data_path: DataPath):
-        self.program_counter = VARS_SEG_SIZE
+        self.PC = VARS_START_POS
         self.data_path = data_path
         self._tick = 0
+        self.mc_unit = MC_Unit()
+
 
     def tick(self):
         self._tick += 1
@@ -146,17 +206,17 @@ class ControlUnit:
 
     def latch_program_counter(self, sel_next):
         if sel_next:
-            self.program_counter += 1
+            self.PC += 1
         else:
             instr = self.data_path.memory[self.data_path.data_address]
             assert 'arg1' in instr or instr['arg1'] is not None, "internal error"
-            self.program_counter = instr['arg1']
-        self.data_path.instr_addr = self.program_counter
+            self.PC = instr['arg1']
+        self.data_path.IR = self.PC
 
     def decode_and_execute_instruction(self):
         instr = self.data_path.memory[self.data_path.data_address]
         opcode = instr['opcode']
-
+        # self.mc_unit.execute()
         if opcode == Opcode.HLT:
             raise StopIteration()
 
@@ -337,7 +397,7 @@ class ControlUnit:
     def __prep__(self):
         state = "{{TICK: {}, PC: {}, ADDR: {}, R0: {}, R1: {}, R2: {}, R3: {}, R4: {}, R5: {} }}".format(
             self._tick,
-            self.program_counter,
+            self.PC,
             self.data_path.data_address,
             self.data_path.regs[0],
             self.data_path.regs[1],
@@ -374,12 +434,14 @@ class ControlUnit:
 
 def simulation(code, input_buffer, memory_size, limit):
     data = code.pop()
-    mem = [0] * VARS_SEG_SIZE
+    # Переменные в память
+    mem = [0] * VARS_START_POS
     for key in data['data']:
         if isinstance(data['data'][key], int):
             mem[int(key)] = data['data'][key]
         else:
             mem[int(key)] = ord(data['data'][key][0])
+    # Кладем инструкции
     for instr in code:
         mem.append(instr)
 

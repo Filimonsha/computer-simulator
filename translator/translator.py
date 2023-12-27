@@ -1,6 +1,7 @@
 import re
 import sys
 from collections import namedtuple
+from enum import Enum
 
 from isa import Opcode, write_code
 from utils import RegisterController
@@ -8,8 +9,6 @@ from utils import RegisterController
 key_words = {"var", "setvar", "loop", "if", "(", ")", "+", "-", "*", "/", "%", "print", "println", "!=", "=", ">", "<",
              "<=", ">=", "return-from", "read", "printc"}
 
-VARS_SEG_SIZE = 100
-STR_SEG_SIZE = 50
 
 
 class Term(namedtuple('Term', 'pos word')):
@@ -545,7 +544,9 @@ class Translator:
         code.append({'opcode': Opcode.HLT, 'term': Opcode.HLT.value})
         data = {'data': {}}
         vals = list(variables.values())
+        print(vals)
         for i, _ in enumerate(vals):
+            list.insert(i,vals[i])
             data['data'][i] = vals[i]
         for i in strings:
             count = 0

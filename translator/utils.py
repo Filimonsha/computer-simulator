@@ -1,4 +1,6 @@
-from machine1 import REGS_COUNT
+REGS_COUNT = 6
+VARS_SEG_SIZE = 100
+STR_SEG_SIZE = 50
 
 
 class RegisterController:
