@@ -4,11 +4,10 @@ from collections import namedtuple
 from enum import Enum
 
 from isa import Opcode, write_code
-from utils import RegisterController
+from utils import RegisterController, VARS_SEG_SIZE, STR_SEG_SIZE
 
 key_words = {"var", "setvar", "loop", "if", "(", ")", "+", "-", "*", "/", "%", "print", "println", "!=", "=", ">", "<",
              "<=", ">=", "return-from", "read", "printc"}
-
 
 
 class Term(namedtuple('Term', 'pos word')):
@@ -32,8 +31,8 @@ class Translator:
     source_code = None
 
     def __init__(self, source_code):
-       self.source_code = source_code
-       RegisterController.init_regs()
+        self.source_code = source_code
+        RegisterController.init_regs()
 
     def slice_source_on_terms(self, text):
         text = re.sub(r'\(', "( ", text)
@@ -59,16 +58,16 @@ class Translator:
         self.slice_source_on_terms(self.source_code)
         self.check_on_brackets()
         return self.lex_source_terms(
-            terms = self.terms,
-            deep = self.deep,
-            code = self.code,
-            variables = self.variables,
-            strings = self.strings,
-            instr_stack = self.instr_stack,
-            instr_counter = self.instr_counter,
-            jmp_stack = self.jmp_stack,
-            if_jmp_stack = self.if_jmp_stack,
-            label_list = self.label_list,
+            terms=self.terms,
+            deep=self.deep,
+            code=self.code,
+            variables=self.variables,
+            strings=self.strings,
+            instr_stack=self.instr_stack,
+            instr_counter=self.instr_counter,
+            jmp_stack=self.jmp_stack,
+            if_jmp_stack=self.if_jmp_stack,
+            label_list=self.label_list,
         )
 
     def lex_source_terms(
@@ -537,24 +536,36 @@ class Translator:
                                 addr = VARS_SEG_SIZE - STR_SEG_SIZE
                                 for i in strings:
                                     addr += len(i)
-                                strings.append(re.search(r'[^\"]+', term.word).group(0))
+                                # strings.append(re.search(r'[^\"]+', term.word).group(0))
+
+                                handledStr = re.sub(r'["\x00]+$','',term.word.strip('"'))
+
+                                strings.append(handledStr)
+                                print("SS", len(handledStr))
                                 variables[term.word] = addr
                             instr['arg1'] = '[' + str(list(variables).index(term.word)) + ']'
                     instr_stack.append(instr)
         code.append({'opcode': Opcode.HLT, 'term': Opcode.HLT.value})
+
         data = {'data': {}}
         vals = list(variables.values())
-        print(vals)
         for i, _ in enumerate(vals):
-            list.insert(i,vals[i])
             data['data'][i] = vals[i]
         for i in strings:
+            # Pascal string
             count = 0
+            length = len(i)
+            hex_string = hex(length)
+            data['data'][VARS_SEG_SIZE - STR_SEG_SIZE + count] = hex_string
+
+            count = 1
+
             for j in i:
                 data['data'][VARS_SEG_SIZE - STR_SEG_SIZE + count] = j
                 count += 1
         code.append(data)
         return code
+
 
 def main(args):
     assert len(args) == 2, "Wrong arguments: translator.py <input_file> <target_file>"

@@ -122,6 +122,13 @@ class DataPath:
 
     def output(self, out_type):
         print("la",out_type)
+
+        def is_hex_string(s):
+            try:
+                int(s, 16)
+                return True
+            except ValueError:
+                return False
         if out_type:
             symbol = self.alu
             logging.debug('output: %s << %s', repr(
@@ -314,9 +321,52 @@ class ControlUnit:
             self.data_path.sel_addr_src(0)
             self.tick()
 
+        # if opcode == Opcode.MOV:
+        #     arg1 = instr['arg1']
+        #     arg2 = instr['arg2']
+        #     if re.search(r'^r[0-5]$', str(arg1)) is not None:
+        #         reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
+        #         if isinstance(arg2, int):
+        #             data_addr = int(arg2)
+        #             self.data_path.data_addr = data_addr
+        #             self.data_path.sel_addr_src(1)
+        #
+        #         elif re.search(r'^\[r[0-5]\]$', str(arg2)) is not None:
+        #             reg2 = int(re.search(r'[0-5]', re.search(r'^\[r[0-5]\]$', arg2).group(0)).group(0))
+        #             self.data_path.sel_l_bus(reg2)
+        #             self.data_path.sel_l_inp(False)
+        #             self.data_path.calc_alu(5)
+        #             self.data_path.sel_addr_src(2)
+        #         self.data_path.sel_reg(reg, 0)
+        #     elif isinstance(arg1, int):
+        #         data_addr = int(arg1)
+        #         self.data_path.data_addr = data_addr
+        #         self.data_path.sel_addr_src(1)
+        #         if re.search(r'^r[0-5]$', str(arg2)) is not None:
+        #             reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg2).group(0)).group(0))
+        #             self.data_path.sel_l_bus(reg)
+        #             self.data_path.sel_l_inp(False)
+        #
+        #         if re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
+        #             const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
+        #             self.data_path.l_const = const
+        #             self.data_path.sel_l_inp(True)
+        #         self.data_path.calc_alu(5)
+        #         self.data_path.write()
+        #     self.tick()
+        #
+        #     if 'res_reg' in instr:
+        #         reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', instr['res_reg']).group(0)).group(0))
+        #         # Записывает в регистры
+        #         self.data_path.sel_reg(reg, 1)
+        #
+        #     self.latch_program_counter(True)
+        #     self.data_path.sel_addr_src(0)
+        #     self.tick()
         if opcode == Opcode.MOV:
             arg1 = instr['arg1']
             arg2 = instr['arg2']
+            print("args",arg1,arg2)
             if re.search(r'^r[0-5]$', str(arg1)) is not None:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
                 if isinstance(arg2, int):
@@ -325,7 +375,7 @@ class ControlUnit:
                     self.data_path.sel_addr_src(1)
 
                 elif re.search(r'^\[r[0-5]\]$', str(arg2)) is not None:
-                    reg2 = int(re.search(r'[0-5]', re.search(r'^\[r[0-5]\]$', arg2).group(0)).group(0))
+                    reg2 = int(re.search(r'[0-5]', re.search(r'^\[r[0-5]2\]$', arg2).group(0)).group(0))
                     self.data_path.sel_l_bus(reg2)
                     self.data_path.sel_l_inp(False)
                     self.data_path.calc_alu(5)

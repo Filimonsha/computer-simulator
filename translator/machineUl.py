@@ -121,7 +121,10 @@ class DataPath:
         logging.debug('input: %s', repr(symbol))
 
     def output(self, out_type):
-        print("la", out_type)
+        print("la",out_type)
+        def is_hex_string(char):
+            char.isdigit() or (char.lower() >= 'a' and char.lower() <= 'f')
+
         if out_type:
             symbol = self.alu
             logging.debug('output: %s << %s', repr(
@@ -130,126 +133,19 @@ class DataPath:
         else:
             symbol = chr(self.alu)
             # TODO change on pascal
-            if symbol != "\0":
+            if not is_hex_string(symbol) and symbol != "\0":
+
                 logging.debug('output: %s << %s', repr(''.join(self.output_buffer)), repr(symbol))
                 self.output_buffer.append(symbol)
 
 
 class MC_Unit:
-    def __init__(self):
+    def __init__(self, data_path):
         self.mc_mem = []
-
-    #     self.opcode_mapping = {
-    #         Opcode.VAR: 0b00000000,
-    #         Opcode.JMP: 0b00000001,
-    #         Opcode.JMPR: 0b00000010,
-    #         Opcode.HLT: 0b00000011,
-    #         Opcode.JNE: 0b00000100,
-    #         Opcode.JE: 0b00000101,
-    #         Opcode.CMP: 0b00000110,
-    #         Opcode.PRINT: 0b00000111,
-    #         Opcode.NOP: 0b00001000,
-    #         Opcode.READ: 0b00001001,
-    #         Opcode.PRINTSTR: 0b00001010,
-    #         Opcode.JLE: 0b00001011,
-    #         Opcode.JGE: 0b00001100,
-    #         Opcode.PRINTC: 0b00001101,
-    #         Opcode.ADD: 0b00001110,
-    #         Opcode.SUB: 0b00001111,
-    #         Opcode.MUL: 0b00010000,
-    #         Opcode.DEV: 0b00010001,
-    #         Opcode.MOD: 0b00010010,
-    #         Opcode.MOV: 0b00010011
-    #     }
-    #
-    # def execute(self,instruction):
-    #     opcode, arg1, arg2, arg3 = self.decode_instruction(instruction)
-    #     for key, value in self.opcode_mapping.items():
-    #         print("OMG IS",key)
-    #         if value == opcode:
-    #             if key == Opcode.VAR:
-    #                 # Обработка инструкции VAR
-    #                 print("Processing VAR instruction")
-    #                 # Дополнительная обработка для каждой инструкции
-    #
-    #             elif key == Opcode.JMP:
-    #                 # Обработка инструкции JMP
-    #                 print("Processing JMP instruction")
-    #                 # Дополнительная обработка для каждой инструкции
-    #
-    #             # Добавьте обработку других инструкций
-    #
-    #             else:
-    #                 print(f"Unhandled instruction: {key}")
-    #
-    #             return
-    #
-    #     print("Unknown opcode")
-    #
-    # def encode_instruction(self, opcode: Opcode, arg1, arg2, arg3):
-    #     print(Opcode["MOV"].,"AAA")
-    #     # Кодирование инструкции в микрокоманду
-    #     return (int(opcode.value) << 24) | (arg1 << 16) | (arg2 << 8) | arg3
-    #
-    # def encode_instruction_decimal(self, opcode:Opcode, arg1, arg2, arg3):
-    #     # Кодирование инструкции в микрокоманду из десятичной формы
-    #     return self.encode_instruction(opcode, arg1, arg2, arg3)
-    # def decode_instruction(self, instruction):
-    #     # Декодирование микрокоманды в значения Opcode и аргументы
-    #     # Эта операция выполняет "битовое И" (&) между значением инструкции и маской 0xFF000000. Маска содержит единицы в старших байтах и нули в младших байтах. Это оставляет только старший байт значения инструкции.
-    #
-    #     opcode = Opcode((instruction & 0xFF000000) >> 24)
-    #     arg1 = (instruction & 0x00FF0000) >> 16
-    #     arg2 = (instruction & 0x0000FF00) >> 8
-    #     arg3 = (instruction & 0x000000FF)
-    #     return opcode, arg1, arg2, arg3
-
-    def encode(self, opcode_value, arg1=None, arg2=None):
-
-        # for member in Opcode:
-        #     if member.value == opcode_value:
-        #         obcode_name = member.name
-        #         break
-        value_to_index = {opcode.value: index for index, opcode in enumerate(Opcode, start=1)}
-        opcode_index = value_to_index[opcode_value]
-        """Кодирование микрокоманды."""
-        opcode_bits = format(opcode_index, '05b')  # 5 bits for opcode
-        arg1_bits = format(arg1, '010b') if arg1 is not None else '0000000000'  # 10 bits for arg1
-        arg2_bits = format(arg2, '010b') if arg2 is not None else '0000000000'  # 10 bits for arg2
-
-        microcode = f"{opcode_bits}{arg1_bits}{arg2_bits}"
-        return microcode
-
-    def decode(self,microcode):
-        """Декодирование микрокоманды."""
-        opcode_bits = microcode[:5]
-        arg1_bits = microcode[5:15]
-        arg2_bits = microcode[15:]
-
-        enum_list = list(Opcode)
-        opcode = enum_list[int(opcode_bits, 2) - 1]
-
-        print(opcode)
-        # opcode = Opcode[int(opcode_bits, 2)].name
-        arg1 = int(arg1_bits, 2)
-        arg2 = int(arg2_bits, 2)
-
-        return opcode, arg1, arg2
-
-
-class ControlUnit:
-
-    def __init__(self, data_path: DataPath):
         self.PC = VARS_START_POS
         self.data_path = data_path
-        self._tick = 0
-        self.mc_unit = MC_Unit()
-
-    def tick(self):
-        self._tick += 1
-
-    def current_tick(self):
-        return self._tick
+        # self.latch_program_counter = latch_program_counter
+        self.tick_counter = 0
 
     def latch_program_counter(self, sel_next):
         if sel_next:
@@ -258,11 +154,41 @@ class ControlUnit:
             instr = self.data_path.memory[self.data_path.data_address]
             assert 'arg1' in instr or instr['arg1'] is not None, "internal error"
             self.PC = instr['arg1']
+
+        print("LATCH",self.data_path.memory[self.data_path.data_address],self.PC)
         self.data_path.IR = self.PC
 
-    def decode_and_execute_instruction(self):
-        instr = self.data_path.memory[self.data_path.data_address]
-        opcode = instr['opcode']
+
+    def tick(self):
+        self.tick_counter += 1
+
+    def set_const(self, arg1, arg2):
+        if re.search(r'^r[0-5]$', str(arg1)) is not None:
+            reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg1)).group(0)).group(0))
+            self.data_path.sel_l_bus(reg)
+            self.data_path.sel_l_inp(False)
+        elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
+            const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
+            self.data_path.l_const = const
+            self.data_path.sel_l_inp(True)
+
+        if re.search(r'^r[0-5]$', str(arg2)) is not None:
+            reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg2)).group(0)).group(0))
+            self.data_path.sel_r_bus(reg)
+            self.data_path.sel_r_inp(False)
+        elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
+            const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
+            self.data_path.r_const = const
+            self.data_path.sel_r_inp(True)
+        elif arg2 == '\0':
+            const = 0
+            self.data_path.r_const = const
+            self.data_path.sel_r_inp(True)
+
+    def execute(self, mc, instr=None):
+        opcode = self.decode(microcode=mc)
+        print("a",opcode,Opcode.MOV,opcode == Opcode.PRINTC,instr)
+
         if opcode == Opcode.HLT:
             raise StopIteration()
 
@@ -305,7 +231,6 @@ class ControlUnit:
             self.tick()
 
         if opcode in {Opcode.ADD, Opcode.SUB, Opcode.MUL, Opcode.DEV, Opcode.MOD, Opcode.CMP}:
-
             arg1 = 0
             arg2 = 0
             if opcode == Opcode.CMP:
@@ -314,43 +239,32 @@ class ControlUnit:
             else:
                 arg1 = instr['args'][0]
                 arg2 = instr['args'][1]
-            if re.search(r'^r[0-5]$', str(arg1)) is not None:
-                reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg1)).group(0)).group(0))
-                self.data_path.sel_l_bus(reg)
-                self.data_path.sel_l_inp(False)
-            elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
-                const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
-                self.data_path.l_const = const
-                self.data_path.sel_l_inp(True)
 
-            if re.search(r'^r[0-5]$', str(arg2)) is not None:
-                reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg2)).group(0)).group(0))
-                self.data_path.sel_r_bus(reg)
-                self.data_path.sel_r_inp(False)
-            elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
-                const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
-                self.data_path.r_const = const
-                self.data_path.sel_r_inp(True)
-            elif arg2 == '\0':
-                const = 0
-                self.data_path.r_const = const
-                self.data_path.sel_r_inp(True)
+            self.set_const(arg1, arg2)
 
             match opcode:
                 case Opcode.ADD:
                     self.data_path.calc_alu(0)
+                    self.tick()
                 case Opcode.SUB:
                     self.data_path.calc_alu(1)
+                    self.tick()
                 case Opcode.MUL:
                     self.data_path.calc_alu(2)
+                    self.tick()
                 case Opcode.DEV:
                     self.data_path.calc_alu(3)
+                    self.tick()
                 case Opcode.MOD:
                     self.data_path.calc_alu(4)
+                    self.tick()
                 case Opcode.CMP:
                     self.data_path.calc_alu(1)
+                    self.tick()
                     self.data_path.set_zero()
+                    self.tick()
                     self.data_path.set_neg()
+                    self.tick()
             self.tick()
 
             if 'res_reg' in instr:
@@ -364,11 +278,6 @@ class ControlUnit:
         if opcode == Opcode.MOV:
             arg1 = instr['arg1']
             arg2 = instr['arg2']
-            print("fAAAA", type(opcode))
-            mc = self.mc_unit.encode(opcode,15,20)
-            print(mc)
-            print(self.mc_unit.decode(mc))
-
             if re.search(r'^r[0-5]$', str(arg1)) is not None:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
                 if isinstance(arg2, int):
@@ -436,7 +345,75 @@ class ControlUnit:
             self.data_path.sel_addr_src(0)
             self.tick()
 
+
+    def encode(self, opcode_value, arg1=None, arg2=None):
+        """Кодирование микрокоманды."""
+
+        value_to_index = {opcode.value: index for index, opcode in enumerate(Opcode, start=1)}
+        opcode_index = value_to_index[opcode_value]
+        opcode_bits = format(opcode_index, '05b')  # 5 bits for opcode
+        arg1_bits = format(hash(arg1) & ((1 << 10) - 1),
+                           '010b') if arg1 is not None else '0000000000'  # 10 bits for arg1
+        arg2_bits = format(hash(arg1) & ((1 << 10) - 1),
+                           '010b') if arg2 is not None else '0000000000'  # 10 bits for arg2
+
+        microcode = f"{opcode_bits}{arg1_bits}{arg2_bits}"
+
+        print(microcode)
+        return microcode
+
+    def decode(self, microcode):
+        """Декодирование микрокоманды."""
+        opcode_bits = microcode[:5]
+        arg1_bits = microcode[5:15]
+        arg2_bits = microcode[15:]
+
+        enum_list = list(Opcode)
+        opcode = enum_list[int(opcode_bits, 2) - 1]
+
+        # opcode = Opcode[int(opcode_bits, 2)].name
+        arg1 = int(arg1_bits, 2)
+        arg2 = int(arg2_bits, 2)
+
+        print("decode",opcode)
+
+        return opcode
+
+
+class ControlUnit:
+
+    def __init__(self, data_path: DataPath):
+        # self.PC = VARS_START_POS
+        # self.data_path = data_path
+        # self._tick = 0
+        self.mc_unit = MC_Unit(data_path)
+
+    # def latch_program_counter(self, sel_next):
+    #     if sel_next:
+    #         self.PC += 1
+    #     else:
+    #         instr = self.data_path.memory[self.data_path.data_address]
+    #         assert 'arg1' in instr or instr['arg1'] is not None, "internal error"
+    #         self.PC = instr['arg1']
+    #     self.data_path.IR = self.PC
+
+    def decode_and_execute_instruction(self):
+        instr = self.mc_unit.data_path.memory[self.mc_unit.data_path.data_address]
+        opcode = instr['opcode']
+        if opcode in {Opcode.HLT, Opcode.JMP, Opcode.JE, Opcode.JNE, Opcode.JLE}:
+            self.mc_unit.execute(self.mc_unit.encode(opcode))
+
+        if opcode in {Opcode.ADD, Opcode.SUB, Opcode.MUL, Opcode.DEV, Opcode.MOD, Opcode.CMP}:
+            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
+
+        if opcode == Opcode.MOV:
+            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
+
+        if opcode in {Opcode.PRINT, Opcode.PRINTC}:
+            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
+
         if opcode == Opcode.READ:
+            # TODO
             arg1 = instr['reg']
             if re.search(r'^r[0-5]$', str(arg1)) is not None:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
@@ -448,17 +425,17 @@ class ControlUnit:
 
     def __prep__(self):
         state = "{{TICK: {}, PC: {}, ADDR: {}, R0: {}, R1: {}, R2: {}, R3: {}, R4: {}, R5: {} }}".format(
-            self._tick,
-            self.PC,
-            self.data_path.data_address,
-            self.data_path.regs[0],
-            self.data_path.regs[1],
-            self.data_path.regs[2],
-            self.data_path.regs[3],
-            self.data_path.regs[4],
-            self.data_path.regs[5],
+            self.mc_unit.tick_counter,
+            self.mc_unit.PC,
+            self.mc_unit.data_path.data_address,
+            self.mc_unit.data_path.regs[0],
+            self.mc_unit.data_path.regs[1],
+            self.mc_unit.data_path.regs[2],
+            self.mc_unit.data_path.regs[3],
+            self.mc_unit.data_path.regs[4],
+            self.mc_unit.data_path.regs[5],
         )
-        instr = self.data_path.memory[self.data_path.data_address]
+        instr = self.mc_unit.data_path.memory[self.mc_unit.data_path.data_address]
         opcode = instr["opcode"]
         if opcode in {Opcode.ADD, Opcode.SUB, Opcode.MUL, Opcode.DEV, Opcode.MOD}:
             arg1 = instr.get("args", "")[0]
@@ -513,7 +490,8 @@ def simulation(code, input_buffer, memory_size, limit):
         logging.warning('Input buffer is empty!')
     except StopIteration:
         pass
-    logging.info('output_buffer: %s', repr(''.join(data_path.output_buffer)))
+    # Не выводим длину строки
+    logging.info('output_buffer: %s', repr(''.join(data_path.output_buffer[1:])))
     return ''.join(data_path.output_buffer), instr_counter
 
 
