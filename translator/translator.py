@@ -6,7 +6,7 @@ from enum import Enum
 from isa import Opcode, write_code
 from utils import RegisterController, VARS_SEG_SIZE, STR_SEG_SIZE
 
-key_words = {"var", "setvar", "loop", "if", "(", ")", "+", "-", "*", "/", "%", "print", "println", "!=", "=", ">", "<",
+key_words = {"var", "setvar", "loop", "if", "(", ")", "+", "-", "*", "/", "%", "printint", "println", "!=", "=", ">", "<",
              "<=", ">=", "return-from", "read", "printc"}
 
 
@@ -163,7 +163,7 @@ class Translator:
                                     case Opcode.ADD | Opcode.SUB | Opcode.MUL | Opcode.DEV | Opcode.MOD:
                                         instr1['args'].append(instr['res_reg'])
 
-                                    case Opcode.PRINT:
+                                    case Opcode.PRINTINT:
                                         if instr1['arg1'] is None:
                                             instr1['arg1'] = instr['res_reg']
                                         instr1['res_reg'] = instr['res_reg']
@@ -194,7 +194,7 @@ class Translator:
 
                             if len(instr_stack) > 0:
                                 instr1 = instr_stack.pop()
-                                if instr1['opcode'] == Opcode.PRINT:
+                                if instr1['opcode'] == Opcode.PRINTINT:
                                     if instr1['arg1'] is None:
                                         instr1['arg1'] = instr['res_reg']
                                     instr1['res_reg'] = instr['res_reg']
@@ -208,7 +208,7 @@ class Translator:
 
                                 instr_stack.append(instr1)
 
-                        if instr['opcode'] in {Opcode.PRINT, Opcode.PRINTC}:
+                        if instr['opcode'] in {Opcode.PRINTINT, Opcode.PRINTC}:
                             arg1 = instr['arg1']
                             if isinstance(arg1, int):
                                 reg = RegisterController.get_free_reg()
@@ -239,7 +239,7 @@ class Translator:
                                     case Opcode.ADD | Opcode.SUB | Opcode.MUL | Opcode.DEV | Opcode.MOD:
                                         instr1['args'].append(instr['res_reg'])
 
-                                    case Opcode.PRINT:
+                                    case Opcode.PRINTINT:
                                         if instr1['arg1'] is None:
                                             instr1['arg1'] = instr['res_reg']
                                         instr1['res_reg'] = instr['res_reg']
@@ -290,7 +290,7 @@ class Translator:
                                     case Opcode.ADD | Opcode.SUB | Opcode.MUL | Opcode.DEV | Opcode.MOD:
                                         instr1['args'].append(cmp_instr['res_reg'])
 
-                                    case Opcode.PRINT:
+                                    case Opcode.PRINTINT:
                                         if instr1['arg1'] is None:
                                             instr1['arg1'] = cmp_instr['res_reg']
                                         instr1['res_reg'] = cmp_instr['res_reg']
@@ -320,7 +320,7 @@ class Translator:
                                     case Opcode.ADD | Opcode.SUB | Opcode.MUL | Opcode.DEV | Opcode.MOD:
                                         instr1['args'].append(instr['res_reg'])
 
-                                    case Opcode.PRINTC | Opcode.PRINT:
+                                    case Opcode.PRINTC | Opcode.PRINTINT:
                                         if instr1['arg1'] is None:
                                             instr1['arg1'] = instr['res_reg']
                                         instr1['res_reg'] = instr['res_reg']
@@ -386,7 +386,7 @@ class Translator:
                                         case Opcode.ADD | Opcode.SUB | Opcode.MUL | Opcode.DEV | Opcode.MOD:
                                             instr2['args'].append(instr1['res_reg'])
 
-                                        case Opcode.PRINT:
+                                        case Opcode.PRINTINT:
                                             if instr2['arg1'] is None:
                                                 instr2['arg1'] = instr1['res_reg']
                                             instr2['res_reg'] = instr1['res_reg']
@@ -446,8 +446,8 @@ class Translator:
                     instr_stack.append({'opcode': Opcode.SUB, 'args': []})
                 case "+":
                     instr_stack.append({'opcode': Opcode.ADD, 'args': []})
-                case "print":
-                    instr_stack.append({'opcode': Opcode.PRINT, 'arg1': None})
+                case "printint":
+                    instr_stack.append({'opcode': Opcode.PRINTINT, 'arg1': None})
                 case "printc":
                     instr_stack.append({'opcode': Opcode.PRINTC, 'arg1': None})
                 case "printstr":
@@ -500,7 +500,7 @@ class Translator:
                             elif re.fullmatch(r'(-?[1-9][0-9]*|0)', term.word):
                                 instr['args'].append(term.word)
 
-                        case Opcode.PRINT | Opcode.PRINTC:
+                        case Opcode.PRINTINT | Opcode.PRINTC:
                             assert instr['arg1'] is None, "To many arguments for PRINT"
                             if re.fullmatch(r'[a-zA-Z]+', term.word):
                                 assert term.word in variables, "Undeclared var " + term.word

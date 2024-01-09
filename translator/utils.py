@@ -22,5 +22,5 @@ class RegisterController:
         assert False, "All regs are busy"
 
     @staticmethod
-    def free_reg( reg_number):
+    def free_reg(reg_number):
         RegisterController.regs[reg_number] = True

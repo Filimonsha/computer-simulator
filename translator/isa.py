@@ -22,7 +22,7 @@ class Opcode(str, Enum):
     JNE = "jne"
     JE = "je"
     CMP = "cmp"
-    PRINT = "print"
+    PRINTINT = "printint"
     NOP = "nop"
     READ = "read"
     PRINTSTR = "printstr"

@@ -10,51 +10,25 @@ VARS_START_POS = 100
 STR_START_POS = 50
 
 
-class DataPath:
-    def __init__(self, memory_size, input_buffer, mem):
-        assert memory_size > 0, "Memory size should be non-zero"
-        self.memory_size = memory_size
-
-        self.IR = 0
-        self.data_addr = 0
-        self.data_address = VARS_START_POS
-
-        self.memory = mem
-        self.input_buffer = input_buffer
-        self.output_buffer = []
-
-        self.regs = [0] * REGS_COUNT
-        self.l_bus = 0
-        self.r_bus = 0
-
-        self.l_const = 0
-        self.r_const = 0
-
+class ALU:
+    def __init__(self):
         self.l_alu = 0
         self.r_alu = 0
         self.zero = 0
         self.neg = 0
         self.alu = 0
 
-    def sel_l_bus(self, reg):
-        assert 0 <= reg < 6, "Machine has only 6 regs"
-        self.l_bus = self.regs[reg]
-
-    def sel_r_bus(self, reg):
-        assert 0 <= reg < 6, "Machine has only 6 regs"
-        self.r_bus = self.regs[reg]
-
-    def sel_l_inp(self, inp_type):
-        if inp_type:
-            self.l_alu = self.l_const
+    def set_zero(self):
+        if self.alu == 0:
+            self.zero = 1
         else:
-            self.l_alu = self.l_bus
+            self.zero = 0
 
-    def sel_r_inp(self, inp_type):
-        if inp_type:
-            self.r_alu = self.r_const
+    def set_neg(self):
+        if self.alu < 0:
+            self.neg = 1
         else:
-            self.r_alu = self.r_bus
+            self.neg = 0
 
     def is_zero(self):
         return self.zero == 1
@@ -77,24 +51,81 @@ class DataPath:
             case 5:
                 self.alu = self.l_alu
 
-    def set_zero(self):
-        if self.alu == 0:
-            self.zero = 1
-        else:
-            self.zero = 0
 
-    def set_neg(self):
-        if self.alu < 0:
-            self.neg = 1
+class DataPath:
+    def __init__(self, memory_size, input_buffer, mem):
+        assert memory_size > 0, "Memory size should be non-zero"
+        self.memory_size = memory_size
+
+        self.IR = 0
+        self.data_addr = 0
+        self.data_address = VARS_START_POS
+
+        self.memory = mem
+        self.input_buffer = input_buffer
+        self.output_buffer = []
+
+        self.regs = [0] * REGS_COUNT
+        # Левая Шина для АЛУ
+        self.left_bus_signal = 0
+        # Правая Шина для АЛУ
+        self.right_bus_signal = 0
+
+        self.l_const = 0
+        self.r_const = 0
+
+        self.ALU_instance = ALU()
+
+        # self.l_alu = 0
+        # self.r_alu = 0
+        # self.zero = 0
+        # self.neg = 0
+        # self.alu = 0
+
+    def set_left_bus_signal(self, reg):
+        assert 0 <= reg < 6, "Machine has only 6 regs"
+        self.left_bus_signal = self.regs[reg]
+
+    def set_right_bus_signal(self, reg):
+        assert 0 <= reg < 6, "Machine has only 6 regs"
+        self.right_bus_signal = self.regs[reg]
+
+    def sel_l_inp(self, inp_type):
+        if inp_type:
+            self.ALU_instance.l_alu = self.l_const
         else:
-            self.neg = 0
+            self.ALU_instance.l_alu = self.left_bus_signal
+
+    def sel_r_inp(self, inp_type):
+        if inp_type:
+            self.ALU_instance.r_alu = self.r_const
+        else:
+            self.ALU_instance.r_alu = self.right_bus_signal
+
+    # def is_zero(self):
+    #     return self.zero == 1
+    #
+    # def is_neg(self):
+    #     return self.neg == 1
+
+    # def set_zero(self):
+    #     if self.alu == 0:
+    #         self.zero = 1
+    #     else:
+    #         self.zero = 0
+    #
+    # def set_neg(self):
+    #     if self.alu < 0:
+    #         self.neg = 1
+    #     else:
+    #         self.neg = 0
 
     def sel_reg(self, reg, src):
         match src:
             case 0:
                 self.regs[reg] = self.memory[self.data_address]
             case 1:
-                self.regs[reg] = self.alu
+                self.regs[reg] = self.ALU_instance.alu
             case 2:
                 self.input(reg)
 
@@ -105,10 +136,10 @@ class DataPath:
             case 1:
                 self.data_address = self.data_addr
             case 2:
-                self.data_address = self.alu
+                self.data_address = self.ALU_instance.alu
 
     def write(self):
-        self.memory[self.data_address] = self.alu
+        self.memory[self.data_address] = self.ALU_instance.alu
 
     def input(self, reg):
         if len(self.input_buffer) == 0:
@@ -121,25 +152,25 @@ class DataPath:
         logging.debug('input: %s', repr(symbol))
 
     def output(self, out_type):
-        print("la",out_type)
+        print("la", out_type)
+
         def is_hex_string(char):
             char.isdigit() or (char.lower() >= 'a' and char.lower() <= 'f')
 
         if out_type:
-            symbol = self.alu
+            symbol = self.ALU_instance.alu
             logging.debug('output: %s << %s', repr(
                 ''.join(self.output_buffer)), repr(str(symbol)))
             self.output_buffer.append(str(symbol))
         else:
-            symbol = chr(self.alu)
+            symbol = chr(self.ALU_instance.alu)
             # TODO change on pascal
             if not is_hex_string(symbol) and symbol != "\0":
-
                 logging.debug('output: %s << %s', repr(''.join(self.output_buffer)), repr(symbol))
                 self.output_buffer.append(symbol)
 
 
-class MC_Unit:
+class MCUnit:
     def __init__(self, data_path):
         self.mc_mem = []
         self.PC = VARS_START_POS
@@ -155,9 +186,8 @@ class MC_Unit:
             assert 'arg1' in instr or instr['arg1'] is not None, "internal error"
             self.PC = instr['arg1']
 
-        print("LATCH",self.data_path.memory[self.data_path.data_address],self.PC)
+        print("LATCH", self.data_path.memory[self.data_path.data_address], self.PC)
         self.data_path.IR = self.PC
-
 
     def tick(self):
         self.tick_counter += 1
@@ -165,7 +195,7 @@ class MC_Unit:
     def set_const(self, arg1, arg2):
         if re.search(r'^r[0-5]$', str(arg1)) is not None:
             reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg1)).group(0)).group(0))
-            self.data_path.sel_l_bus(reg)
+            self.data_path.set_left_bus_signal(reg)
             self.data_path.sel_l_inp(False)
         elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
             const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
@@ -174,7 +204,7 @@ class MC_Unit:
 
         if re.search(r'^r[0-5]$', str(arg2)) is not None:
             reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg2)).group(0)).group(0))
-            self.data_path.sel_r_bus(reg)
+            self.data_path.set_right_bus_signal(reg)
             self.data_path.sel_r_inp(False)
         elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
             const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
@@ -187,7 +217,7 @@ class MC_Unit:
 
     def execute(self, mc, instr=None):
         opcode = self.decode(microcode=mc)
-        print("a",opcode,Opcode.MOV,opcode == Opcode.PRINTC,instr)
+        print("a", opcode, Opcode.MOV, opcode == Opcode.PRINTC, instr)
 
         if opcode == Opcode.HLT:
             raise StopIteration()
@@ -198,7 +228,7 @@ class MC_Unit:
             self.tick()
 
         if opcode == Opcode.JE:
-            if self.data_path.is_zero():
+            if self.data_path.ALU_instance.is_zero():
                 self.latch_program_counter(sel_next=False)
             else:
                 # TODO добавить тики
@@ -207,7 +237,7 @@ class MC_Unit:
             self.tick()
 
         if opcode == Opcode.JNE:
-            if self.data_path.is_zero():
+            if self.data_path.ALU_instance.is_zero():
                 self.latch_program_counter(sel_next=True)
             else:
                 self.latch_program_counter(sel_next=False)
@@ -215,7 +245,7 @@ class MC_Unit:
             self.tick()
 
         if opcode == Opcode.JLE:
-            if self.data_path.is_neg() or self.data_path.is_zero():
+            if self.data_path.ALU_instance.is_neg() or self.data_path.ALU_instance.is_zero():
                 self.latch_program_counter(sel_next=False)
             else:
                 self.latch_program_counter(sel_next=True)
@@ -223,7 +253,7 @@ class MC_Unit:
             self.tick()
 
         if opcode == Opcode.JGE:
-            if not self.data_path.is_neg() or self.data_path.is_zero():
+            if not self.data_path.ALU_instance.is_neg() or self.data_path.ALU_instance.is_zero():
                 self.latch_program_counter(sel_next=False)
             else:
                 self.latch_program_counter(sel_next=True)
@@ -244,26 +274,26 @@ class MC_Unit:
 
             match opcode:
                 case Opcode.ADD:
-                    self.data_path.calc_alu(0)
+                    self.data_path.ALU_instance.calc_alu(0)
                     self.tick()
                 case Opcode.SUB:
-                    self.data_path.calc_alu(1)
+                    self.data_path.ALU_instance.calc_alu(1)
                     self.tick()
                 case Opcode.MUL:
-                    self.data_path.calc_alu(2)
+                    self.data_path.ALU_instance.calc_alu(2)
                     self.tick()
                 case Opcode.DEV:
-                    self.data_path.calc_alu(3)
+                    self.data_path.ALU_instance.calc_alu(3)
                     self.tick()
                 case Opcode.MOD:
-                    self.data_path.calc_alu(4)
+                    self.data_path.ALU_instance.calc_alu(4)
                     self.tick()
                 case Opcode.CMP:
-                    self.data_path.calc_alu(1)
+                    self.data_path.ALU_instance.calc_alu(1)
                     self.tick()
-                    self.data_path.set_zero()
+                    self.data_path.ALU_instance.set_zero()
                     self.tick()
-                    self.data_path.set_neg()
+                    self.data_path.ALU_instance.set_neg()
                     self.tick()
             self.tick()
 
@@ -287,9 +317,9 @@ class MC_Unit:
 
                 elif re.search(r'^\[r[0-5]\]$', str(arg2)) is not None:
                     reg2 = int(re.search(r'[0-5]', re.search(r'^\[r[0-5]\]$', arg2).group(0)).group(0))
-                    self.data_path.sel_l_bus(reg2)
+                    self.data_path.set_left_bus_signal(reg2)
                     self.data_path.sel_l_inp(False)
-                    self.data_path.calc_alu(5)
+                    self.data_path.ALU_instance.calc_alu(5)
                     self.data_path.sel_addr_src(2)
                 self.data_path.sel_reg(reg, 0)
             elif isinstance(arg1, int):
@@ -298,14 +328,14 @@ class MC_Unit:
                 self.data_path.sel_addr_src(1)
                 if re.search(r'^r[0-5]$', str(arg2)) is not None:
                     reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg2).group(0)).group(0))
-                    self.data_path.sel_l_bus(reg)
+                    self.data_path.set_left_bus_signal(reg)
                     self.data_path.sel_l_inp(False)
 
                 if re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
                     const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
                     self.data_path.l_const = const
                     self.data_path.sel_l_inp(True)
-                self.data_path.calc_alu(5)
+                self.data_path.ALU_instance.calc_alu(5)
                 self.data_path.write()
             self.tick()
 
@@ -318,20 +348,20 @@ class MC_Unit:
             self.data_path.sel_addr_src(0)
             self.tick()
 
-        if opcode in {Opcode.PRINT, Opcode.PRINTC}:
+        if opcode in {Opcode.PRINTINT, Opcode.PRINTC}:
             arg1 = instr['arg1']
             if re.search(r'^r[0-5]$', str(arg1)) is not None:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
-                self.data_path.sel_l_bus(reg)
+                self.data_path.set_left_bus_signal(reg)
                 self.data_path.sel_l_inp(False)
-                self.data_path.calc_alu(5)
+                self.data_path.ALU_instance.calc_alu(5)
             elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
                 const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
                 self.data_path.l_const = const
                 self.data_path.sel_l_inp(True)
-                self.data_path.calc_alu(5)
+                self.data_path.ALU_instance.calc_alu(5)
 
-            if opcode == Opcode.PRINT:
+            if opcode == Opcode.PRINTINT:
                 self.data_path.output(True)
             else:
                 self.data_path.output(False)
@@ -345,6 +375,16 @@ class MC_Unit:
             self.data_path.sel_addr_src(0)
             self.tick()
 
+        if opcode == Opcode.READ:
+            # TODO
+            arg1 = instr['reg']
+            if re.search(r'^r[0-5]$', str(arg1)) is not None:
+                reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
+                self.data_path.sel_reg(reg, 2)
+                self.tick()
+            self.latch_program_counter(True)
+            self.data_path.sel_addr_src(0)
+            self.tick()
 
     def encode(self, opcode_value, arg1=None, arg2=None):
         """Кодирование микрокоманды."""
@@ -375,7 +415,7 @@ class MC_Unit:
         arg1 = int(arg1_bits, 2)
         arg2 = int(arg2_bits, 2)
 
-        print("decode",opcode)
+        print("decode", opcode)
 
         return opcode
 
@@ -386,7 +426,7 @@ class ControlUnit:
         # self.PC = VARS_START_POS
         # self.data_path = data_path
         # self._tick = 0
-        self.mc_unit = MC_Unit(data_path)
+        self.mc_unit = MCUnit(data_path)
 
     # def latch_program_counter(self, sel_next):
     #     if sel_next:
@@ -409,19 +449,20 @@ class ControlUnit:
         if opcode == Opcode.MOV:
             self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
 
-        if opcode in {Opcode.PRINT, Opcode.PRINTC}:
+        if opcode in {Opcode.PRINTINT, Opcode.PRINTC}:
             self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
 
         if opcode == Opcode.READ:
             # TODO
-            arg1 = instr['reg']
-            if re.search(r'^r[0-5]$', str(arg1)) is not None:
-                reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
-                self.data_path.sel_reg(reg, 2)
-                self.tick()
-            self.latch_program_counter(True)
-            self.data_path.sel_addr_src(0)
-            self.tick()
+            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
+            # arg1 = instr['reg']
+            # if re.search(r'^r[0-5]$', str(arg1)) is not None:
+            #     reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
+            #     self.data_path.sel_reg(reg, 2)
+            #     self.tick()
+            # self.latch_program_counter(True)
+            # self.data_path.sel_addr_src(0)
+            # self.tick()
 
     def __prep__(self):
         state = "{{TICK: {}, PC: {}, ADDR: {}, R0: {}, R1: {}, R2: {}, R3: {}, R4: {}, R5: {} }}".format(
@@ -491,7 +532,7 @@ def simulation(code, input_buffer, memory_size, limit):
     except StopIteration:
         pass
     # Не выводим длину строки
-    logging.info('output_buffer: %s', repr(''.join(data_path.output_buffer[1:])))
+    logging.info('output_buffer: %s', repr(''.join(data_path.output_buffer)))
     return ''.join(data_path.output_buffer), instr_counter
 
 
@@ -501,11 +542,12 @@ def main(args):
 
     code = read_code(code_file)
     input_buffer = []
+
     with open(input_file, encoding="utf-8") as file:
         input_text = file.read()
+        input_buffer.append(str(len(input_text)))
         for char in input_text:
             input_buffer.append(char)
-    input_buffer.append("\0")
     output, instr_counter = simulation(code, input_buffer=input_buffer, memory_size=150, limit=1000)
     print("instr_counter: ", instr_counter)
     return output
