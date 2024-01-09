@@ -1,0 +1,5 @@
+(printstr "What is your name? Hello,")
+
+(loop
+    (printc (read))
+)

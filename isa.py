@@ -35,19 +35,18 @@ class Opcode(str, Enum):
     DEV = "dev"
     MOD = "mod"
     MOV = "mov"
+
+
 class Term(namedtuple('Term', 'pos word')):
     """Описание выражения из исходного текста программы."""
-    # сделано через класс, чтобы был docstring
 
 
 def write_code(filename, code):
-    """Записать машинный код в файл."""
     with open(filename, "w", encoding="utf-8") as file:
         file.write(json.dumps(code, indent=4))
 
 
 def read_code(filename):
-    """Прочесть машинный код из файла."""
     with open(filename, encoding="utf-8") as file:
         code = json.loads(file.read())
     return code

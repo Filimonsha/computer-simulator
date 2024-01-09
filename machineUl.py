@@ -52,16 +52,39 @@ class ALU:
                 self.alu = self.l_alu
 
 
+class CommonMemory:
+    def __init__(self, code):
+        self.code = code
+
+        self.data = self.code.pop()['data']
+
+        self.memory = [0] * VARS_START_POS
+
+        self.load_memory()
+
+    def load_memory(self):
+        for key in self.data:
+            if isinstance(self.data[key], int):
+                self.memory[int(key)] = self.data[key]
+            else:
+                self.memory[int(key)] = ord(self.data[key][0])
+
+        # Кладем инструкции
+        for instr in self.code:
+            print(instr)
+            self.memory.append(instr)
+
+
 class DataPath:
-    def __init__(self, memory_size, input_buffer, mem):
+    def __init__(self, memory_size, input_buffer, code):
         assert memory_size > 0, "Memory size should be non-zero"
         self.memory_size = memory_size
 
         self.IR = 0
-        self.data_addr = 0
+        self.pointer_of_indirect_addressing = 0
         self.data_address = VARS_START_POS
 
-        self.memory = mem
+        self.common_memory = CommonMemory(code).memory
         self.input_buffer = input_buffer
         self.output_buffer = []
 
@@ -76,12 +99,6 @@ class DataPath:
 
         self.ALU_instance = ALU()
 
-        # self.l_alu = 0
-        # self.r_alu = 0
-        # self.zero = 0
-        # self.neg = 0
-        # self.alu = 0
-
     def set_left_bus_signal(self, reg):
         assert 0 <= reg < 6, "Machine has only 6 regs"
         self.left_bus_signal = self.regs[reg]
@@ -90,40 +107,22 @@ class DataPath:
         assert 0 <= reg < 6, "Machine has only 6 regs"
         self.right_bus_signal = self.regs[reg]
 
-    def sel_l_inp(self, inp_type):
+    def set_left_alu_input_signal(self, inp_type):
         if inp_type:
             self.ALU_instance.l_alu = self.l_const
         else:
             self.ALU_instance.l_alu = self.left_bus_signal
 
-    def sel_r_inp(self, inp_type):
+    def sel_right_alu_input_signal(self, inp_type):
         if inp_type:
             self.ALU_instance.r_alu = self.r_const
         else:
             self.ALU_instance.r_alu = self.right_bus_signal
 
-    # def is_zero(self):
-    #     return self.zero == 1
-    #
-    # def is_neg(self):
-    #     return self.neg == 1
-
-    # def set_zero(self):
-    #     if self.alu == 0:
-    #         self.zero = 1
-    #     else:
-    #         self.zero = 0
-    #
-    # def set_neg(self):
-    #     if self.alu < 0:
-    #         self.neg = 1
-    #     else:
-    #         self.neg = 0
-
     def sel_reg(self, reg, src):
         match src:
             case 0:
-                self.regs[reg] = self.memory[self.data_address]
+                self.regs[reg] = self.common_memory[self.data_address]
             case 1:
                 self.regs[reg] = self.ALU_instance.alu
             case 2:
@@ -133,13 +132,15 @@ class DataPath:
         match src:
             case 0:
                 self.data_address = self.IR
+            #     Косвенная адресация
             case 1:
-                self.data_address = self.data_addr
+                self.data_address = self.pointer_of_indirect_addressing
+            #     Рассчитанная адресация
             case 2:
                 self.data_address = self.ALU_instance.alu
 
     def write(self):
-        self.memory[self.data_address] = self.ALU_instance.alu
+        self.common_memory[self.data_address] = self.ALU_instance.alu
 
     def input(self, reg):
         if len(self.input_buffer) == 0:
@@ -152,7 +153,6 @@ class DataPath:
         logging.debug('input: %s', repr(symbol))
 
     def output(self, out_type):
-        print("la", out_type)
 
         def is_hex_string(char):
             char.isdigit() or (char.lower() >= 'a' and char.lower() <= 'f')
@@ -164,10 +164,8 @@ class DataPath:
             self.output_buffer.append(str(symbol))
         else:
             symbol = chr(self.ALU_instance.alu)
-            # TODO change on pascal
-            if not is_hex_string(symbol) and symbol != "\0":
-                logging.debug('output: %s << %s', repr(''.join(self.output_buffer)), repr(symbol))
-                self.output_buffer.append(symbol)
+            logging.debug('output: %s << %s', repr(''.join(self.output_buffer)), repr(symbol))
+            self.output_buffer.append(symbol)
 
 
 class MCUnit:
@@ -182,11 +180,10 @@ class MCUnit:
         if sel_next:
             self.PC += 1
         else:
-            instr = self.data_path.memory[self.data_path.data_address]
+            instr = self.data_path.common_memory[self.data_path.data_address]
             assert 'arg1' in instr or instr['arg1'] is not None, "internal error"
             self.PC = instr['arg1']
 
-        print("LATCH", self.data_path.memory[self.data_path.data_address], self.PC)
         self.data_path.IR = self.PC
 
     def tick(self):
@@ -196,28 +193,27 @@ class MCUnit:
         if re.search(r'^r[0-5]$', str(arg1)) is not None:
             reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg1)).group(0)).group(0))
             self.data_path.set_left_bus_signal(reg)
-            self.data_path.sel_l_inp(False)
+            self.data_path.set_left_alu_input_signal(False)
         elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
             const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
             self.data_path.l_const = const
-            self.data_path.sel_l_inp(True)
+            self.data_path.set_left_alu_input_signal(True)
 
         if re.search(r'^r[0-5]$', str(arg2)) is not None:
             reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', str(arg2)).group(0)).group(0))
             self.data_path.set_right_bus_signal(reg)
-            self.data_path.sel_r_inp(False)
+            self.data_path.sel_right_alu_input_signal(False)
         elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
             const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
             self.data_path.r_const = const
-            self.data_path.sel_r_inp(True)
+            self.data_path.sel_right_alu_input_signal(True)
         elif arg2 == '\0':
             const = 0
             self.data_path.r_const = const
-            self.data_path.sel_r_inp(True)
+            self.data_path.sel_right_alu_input_signal(True)
 
     def execute(self, mc, instr=None):
         opcode = self.decode(microcode=mc)
-        print("a", opcode, Opcode.MOV, opcode == Opcode.PRINTC, instr)
 
         if opcode == Opcode.HLT:
             raise StopIteration()
@@ -311,30 +307,30 @@ class MCUnit:
             if re.search(r'^r[0-5]$', str(arg1)) is not None:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
                 if isinstance(arg2, int):
-                    data_addr = int(arg2)
-                    self.data_path.data_addr = data_addr
+                    pointer_of_indirect_addressing = int(arg2)
+                    self.data_path.pointer_of_indirect_addressing = pointer_of_indirect_addressing
                     self.data_path.sel_addr_src(1)
 
                 elif re.search(r'^\[r[0-5]\]$', str(arg2)) is not None:
                     reg2 = int(re.search(r'[0-5]', re.search(r'^\[r[0-5]\]$', arg2).group(0)).group(0))
                     self.data_path.set_left_bus_signal(reg2)
-                    self.data_path.sel_l_inp(False)
+                    self.data_path.set_left_alu_input_signal(False)
                     self.data_path.ALU_instance.calc_alu(5)
                     self.data_path.sel_addr_src(2)
                 self.data_path.sel_reg(reg, 0)
             elif isinstance(arg1, int):
-                data_addr = int(arg1)
-                self.data_path.data_addr = data_addr
+                pointer_of_indirect_addressing = int(arg1)
+                self.data_path.pointer_of_indirect_addressing = pointer_of_indirect_addressing
                 self.data_path.sel_addr_src(1)
                 if re.search(r'^r[0-5]$', str(arg2)) is not None:
                     reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg2).group(0)).group(0))
                     self.data_path.set_left_bus_signal(reg)
-                    self.data_path.sel_l_inp(False)
+                    self.data_path.set_left_alu_input_signal(False)
 
                 if re.search(r'^(-?[1-9][0-9]*|0)$', str(arg2)) is not None:
                     const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
                     self.data_path.l_const = const
-                    self.data_path.sel_l_inp(True)
+                    self.data_path.set_left_alu_input_signal(True)
                 self.data_path.ALU_instance.calc_alu(5)
                 self.data_path.write()
             self.tick()
@@ -353,12 +349,12 @@ class MCUnit:
             if re.search(r'^r[0-5]$', str(arg1)) is not None:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
                 self.data_path.set_left_bus_signal(reg)
-                self.data_path.sel_l_inp(False)
+                self.data_path.set_left_alu_input_signal(False)
                 self.data_path.ALU_instance.calc_alu(5)
             elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
                 const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
                 self.data_path.l_const = const
-                self.data_path.sel_l_inp(True)
+                self.data_path.set_left_alu_input_signal(True)
                 self.data_path.ALU_instance.calc_alu(5)
 
             if opcode == Opcode.PRINTINT:
@@ -399,7 +395,6 @@ class MCUnit:
 
         microcode = f"{opcode_bits}{arg1_bits}{arg2_bits}"
 
-        print(microcode)
         return microcode
 
     def decode(self, microcode):
@@ -415,54 +410,18 @@ class MCUnit:
         arg1 = int(arg1_bits, 2)
         arg2 = int(arg2_bits, 2)
 
-        print("decode", opcode)
-
         return opcode
 
 
 class ControlUnit:
 
     def __init__(self, data_path: DataPath):
-        # self.PC = VARS_START_POS
-        # self.data_path = data_path
-        # self._tick = 0
         self.mc_unit = MCUnit(data_path)
 
-    # def latch_program_counter(self, sel_next):
-    #     if sel_next:
-    #         self.PC += 1
-    #     else:
-    #         instr = self.data_path.memory[self.data_path.data_address]
-    #         assert 'arg1' in instr or instr['arg1'] is not None, "internal error"
-    #         self.PC = instr['arg1']
-    #     self.data_path.IR = self.PC
-
     def decode_and_execute_instruction(self):
-        instr = self.mc_unit.data_path.memory[self.mc_unit.data_path.data_address]
+        instr = self.mc_unit.data_path.common_memory[self.mc_unit.data_path.data_address]
         opcode = instr['opcode']
-        if opcode in {Opcode.HLT, Opcode.JMP, Opcode.JE, Opcode.JNE, Opcode.JLE}:
-            self.mc_unit.execute(self.mc_unit.encode(opcode))
-
-        if opcode in {Opcode.ADD, Opcode.SUB, Opcode.MUL, Opcode.DEV, Opcode.MOD, Opcode.CMP}:
-            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
-
-        if opcode == Opcode.MOV:
-            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
-
-        if opcode in {Opcode.PRINTINT, Opcode.PRINTC}:
-            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
-
-        if opcode == Opcode.READ:
-            # TODO
-            self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
-            # arg1 = instr['reg']
-            # if re.search(r'^r[0-5]$', str(arg1)) is not None:
-            #     reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
-            #     self.data_path.sel_reg(reg, 2)
-            #     self.tick()
-            # self.latch_program_counter(True)
-            # self.data_path.sel_addr_src(0)
-            # self.tick()
+        self.mc_unit.execute(self.mc_unit.encode(opcode), instr)
 
     def __prep__(self):
         state = "{{TICK: {}, PC: {}, ADDR: {}, R0: {}, R1: {}, R2: {}, R3: {}, R4: {}, R5: {} }}".format(
@@ -476,7 +435,7 @@ class ControlUnit:
             self.mc_unit.data_path.regs[4],
             self.mc_unit.data_path.regs[5],
         )
-        instr = self.mc_unit.data_path.memory[self.mc_unit.data_path.data_address]
+        instr = self.mc_unit.data_path.common_memory[self.mc_unit.data_path.data_address]
         opcode = instr["opcode"]
         if opcode in {Opcode.ADD, Opcode.SUB, Opcode.MUL, Opcode.DEV, Opcode.MOD}:
             arg1 = instr.get("args", "")[0]
@@ -503,52 +462,41 @@ class ControlUnit:
 
 
 def simulation(code, input_buffer, memory_size, limit):
-    data = code.pop()
-    # Переменные в память
-    mem = [0] * VARS_START_POS
-    for key in data['data']:
-        if isinstance(data['data'][key], int):
-            mem[int(key)] = data['data'][key]
-        else:
-            mem[int(key)] = ord(data['data'][key][0])
-    # Кладем инструкции
-    for instr in code:
-        mem.append(instr)
 
-    data_path = DataPath(memory_size, input_buffer, mem)
+    data_path = DataPath(memory_size, input_buffer, code)
     control_unit = ControlUnit(data_path)
-    instr_counter = 0
+    # instr_counter = 0
 
     logging.debug('%s', control_unit.__prep__())
     try:
         while True:
-            assert limit > instr_counter, "too long execution, increase limit!"
             # TODO
+            assert limit > control_unit.mc_unit.tick_counter, "too long execution, increase limit!"
+
             control_unit.decode_and_execute_instruction()
-            instr_counter += 1
             logging.debug('%s', control_unit.__prep__())
     except EOFError:
         logging.warning('Input buffer is empty!')
     except StopIteration:
         pass
-    # Не выводим длину строки
+
     logging.info('output_buffer: %s', repr(''.join(data_path.output_buffer)))
-    return ''.join(data_path.output_buffer), instr_counter
+    return ''.join(data_path.output_buffer)
 
 
 def main(args):
     assert len(args) == 2, "Wrong arguments: machine.py <code_file> <input_file>"
+    input_buff = []
     code_file, input_file = args
-
     code = read_code(code_file)
-    input_buffer = []
 
     with open(input_file, encoding="utf-8") as file:
         input_text = file.read()
-        input_buffer.append(str(len(input_text)))
+        # input_buffer.append(str(len(input_text)))
         for char in input_text:
-            input_buffer.append(char)
-    output, instr_counter = simulation(code, input_buffer=input_buffer, memory_size=150, limit=1000)
+            input_buff.append(char)
+    output, instr_counter = simulation(code, input_buffer=input_buff, memory_size=150, limit=10000)
+    print(''.join(output))
     print("instr_counter: ", instr_counter)
     return output
 

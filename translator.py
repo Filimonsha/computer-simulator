@@ -541,7 +541,6 @@ class Translator:
                                 handledStr = re.sub(r'["\x00]+$','',term.word.strip('"'))
 
                                 strings.append(handledStr)
-                                print("SS", len(handledStr))
                                 variables[term.word] = addr
                             instr['arg1'] = '[' + str(list(variables).index(term.word)) + ']'
                     instr_stack.append(instr)
@@ -557,8 +556,9 @@ class Translator:
             length = len(i)
             hex_string = hex(length)
             data['data'][VARS_SEG_SIZE - STR_SEG_SIZE + count] = hex_string
-
-            count = 1
+            for j in hex_string:
+                data['data'][VARS_SEG_SIZE - STR_SEG_SIZE + count] = j
+                count += 1
 
             for j in i:
                 data['data'][VARS_SEG_SIZE - STR_SEG_SIZE + count] = j
@@ -575,9 +575,13 @@ def main(args):
         source = file.read()
 
     translator = Translator(source)
-    code = translator.translate_into_opcode()
-    print("source LoC:", len(source.split()), "code instr:", len(code) - 1)
-    write_code(target, code)
+    try:
+        code = translator.translate_into_opcode()
+        print("source LoC:", len(source.split()), "code instr:", len(code) - 1)
+        write_code(target, code)
+    except TypeError:
+        pass
+
 
 
 if __name__ == '__main__':
