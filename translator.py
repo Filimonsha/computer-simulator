@@ -1,7 +1,6 @@
 import re
 import sys
 from collections import namedtuple
-from enum import Enum
 
 from isa import Opcode, write_code
 from utils import RegisterController, VARS_SEG_SIZE, STR_SEG_SIZE

@@ -13,7 +13,7 @@ import tempfile
 
 import pytest
 
-import machineUl
+import machine
 import translator
 
 
@@ -61,7 +61,7 @@ def test_whole_by_golden(golden, caplog):
         with contextlib.redirect_stdout(io.StringIO()) as stdout:
             translator.main([source, target])
             print("============================================================")
-            machineUl.main([target, input_stream])
+            machine.main([target, input_stream])
 
         # Выходные данные также считываем в переменные.
         with open(target, encoding="utf-8") as file:

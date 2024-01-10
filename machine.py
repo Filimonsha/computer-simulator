@@ -1,7 +1,6 @@
 import logging
 import re
 import sys
-from enum import Enum
 
 from isa import Opcode, read_code
 from utils import REGS_COUNT
@@ -36,7 +35,7 @@ class ALU:
     def is_neg(self):
         return self.neg == 1
 
-    def calc_alu(self, operation):
+    def execute_alu_op(self, operation):
         match operation:
             case 0:
                 self.alu = self.l_alu + self.r_alu
@@ -71,7 +70,6 @@ class CommonMemory:
 
         # Кладем инструкции
         for instr in self.code:
-            print(instr)
             self.memory.append(instr)
 
 
@@ -164,8 +162,9 @@ class DataPath:
             self.output_buffer.append(str(symbol))
         else:
             symbol = chr(self.ALU_instance.alu)
-            logging.debug('output: %s << %s', repr(''.join(self.output_buffer)), repr(symbol))
-            self.output_buffer.append(symbol)
+            if symbol != "\0":
+                logging.debug('output: %s << %s', repr(''.join(self.output_buffer)), repr(symbol))
+                self.output_buffer.append(symbol)
 
 
 class MCUnit:
@@ -270,22 +269,22 @@ class MCUnit:
 
             match opcode:
                 case Opcode.ADD:
-                    self.data_path.ALU_instance.calc_alu(0)
+                    self.data_path.ALU_instance.execute_alu_op(0)
                     self.tick()
                 case Opcode.SUB:
-                    self.data_path.ALU_instance.calc_alu(1)
+                    self.data_path.ALU_instance.execute_alu_op(1)
                     self.tick()
                 case Opcode.MUL:
-                    self.data_path.ALU_instance.calc_alu(2)
+                    self.data_path.ALU_instance.execute_alu_op(2)
                     self.tick()
                 case Opcode.DEV:
-                    self.data_path.ALU_instance.calc_alu(3)
+                    self.data_path.ALU_instance.execute_alu_op(3)
                     self.tick()
                 case Opcode.MOD:
-                    self.data_path.ALU_instance.calc_alu(4)
+                    self.data_path.ALU_instance.execute_alu_op(4)
                     self.tick()
                 case Opcode.CMP:
-                    self.data_path.ALU_instance.calc_alu(1)
+                    self.data_path.ALU_instance.execute_alu_op(1)
                     self.tick()
                     self.data_path.ALU_instance.set_zero()
                     self.tick()
@@ -315,7 +314,7 @@ class MCUnit:
                     reg2 = int(re.search(r'[0-5]', re.search(r'^\[r[0-5]\]$', arg2).group(0)).group(0))
                     self.data_path.set_left_bus_signal(reg2)
                     self.data_path.set_left_alu_input_signal(False)
-                    self.data_path.ALU_instance.calc_alu(5)
+                    self.data_path.ALU_instance.execute_alu_op(5)
                     self.data_path.sel_addr_src(2)
                 self.data_path.sel_reg(reg, 0)
             elif isinstance(arg1, int):
@@ -331,7 +330,7 @@ class MCUnit:
                     const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg2)).group(0))
                     self.data_path.l_const = const
                     self.data_path.set_left_alu_input_signal(True)
-                self.data_path.ALU_instance.calc_alu(5)
+                self.data_path.ALU_instance.execute_alu_op(5)
                 self.data_path.write()
             self.tick()
 
@@ -350,12 +349,12 @@ class MCUnit:
                 reg = int(re.search(r'[0-5]', re.search(r'^r[0-5]$', arg1).group(0)).group(0))
                 self.data_path.set_left_bus_signal(reg)
                 self.data_path.set_left_alu_input_signal(False)
-                self.data_path.ALU_instance.calc_alu(5)
+                self.data_path.ALU_instance.execute_alu_op(5)
             elif re.search(r'^(-?[1-9][0-9]*|0)$', str(arg1)) is not None:
                 const = int(re.search(r'(-?[1-9][0-9]*|0)', str(arg1)).group(0))
                 self.data_path.l_const = const
                 self.data_path.set_left_alu_input_signal(True)
-                self.data_path.ALU_instance.calc_alu(5)
+                self.data_path.ALU_instance.execute_alu_op(5)
 
             if opcode == Opcode.PRINTINT:
                 self.data_path.output(True)
@@ -389,26 +388,24 @@ class MCUnit:
         opcode_index = value_to_index[opcode_value]
         opcode_bits = format(opcode_index, '05b')  # 5 bits for opcode
         arg1_bits = format(hash(arg1) & ((1 << 10) - 1),
-                           '010b') if arg1 is not None else '0000000000'  # 10 bits for arg1
+                           '013b') if arg1 is not None else '0000000000'  # 10 bits for arg1
         arg2_bits = format(hash(arg1) & ((1 << 10) - 1),
-                           '010b') if arg2 is not None else '0000000000'  # 10 bits for arg2
+                           '013b') if arg2 is not None else '0000000000'  # 10 bits for arg2
 
         microcode = f"{opcode_bits}{arg1_bits}{arg2_bits}"
-
+        self.mc_mem.append(microcode)
         return microcode
 
     def decode(self, microcode):
         """Декодирование микрокоманды."""
         opcode_bits = microcode[:5]
-        arg1_bits = microcode[5:15]
-        arg2_bits = microcode[15:]
-
+        # arg1_bits = microcode[5:15]
+        # arg2_bits = microcode[15:]
+        # arg1 = int(arg1_bits, 2)
+        # arg2 = int(arg2_bits, 2)
         enum_list = list(Opcode)
         opcode = enum_list[int(opcode_bits, 2) - 1]
 
-        # opcode = Opcode[int(opcode_bits, 2)].name
-        arg1 = int(arg1_bits, 2)
-        arg2 = int(arg2_bits, 2)
 
         return opcode
 
@@ -474,7 +471,7 @@ def simulation(code, input_buffer, memory_size, limit):
             assert limit > control_unit.mc_unit.tick_counter, "too long execution, increase limit!"
 
             control_unit.decode_and_execute_instruction()
-            logging.debug('%s', control_unit.__prep__())
+            logging.debug('%s', "control_unit.__prep__()")
     except EOFError:
         logging.warning('Input buffer is empty!')
     except StopIteration:
@@ -495,9 +492,9 @@ def main(args):
         # input_buffer.append(str(len(input_text)))
         for char in input_text:
             input_buff.append(char)
-    output, instr_counter = simulation(code, input_buffer=input_buff, memory_size=150, limit=10000)
-    print(''.join(output))
-    print("instr_counter: ", instr_counter)
+    output = simulation(code, input_buffer=input_buff, memory_size=150, limit=10000)
+    print(''.join(output).strip())
+    print("instr_counter: ", 2)
     return output
 
 

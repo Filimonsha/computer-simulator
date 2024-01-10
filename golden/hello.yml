@@ -2,91 +2,110 @@ source: |-
   (printstr "Hello, world")
 input: |
 log: |
-  DEBUG    root:machine.py:384 {TICK: 0, PC: 100, ADDR: 100, R0: 0, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } mov r0 0
-  DEBUG    root:machine.py:390 {TICK: 2, PC: 101, ADDR: 101, R0: 50, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 4, PC: 102, ADDR: 102, R0: 50, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 6, PC: 103, ADDR: 103, R0: 51, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: '' << 'H'
-  DEBUG    root:machine.py:390 {TICK: 8, PC: 104, ADDR: 104, R0: 51, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 10, PC: 105, ADDR: 105, R0: 51, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 11, PC: 101, ADDR: 101, R0: 51, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 13, PC: 102, ADDR: 102, R0: 51, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 15, PC: 103, ADDR: 103, R0: 52, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'H' << 'e'
-  DEBUG    root:machine.py:390 {TICK: 17, PC: 104, ADDR: 104, R0: 52, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 19, PC: 105, ADDR: 105, R0: 52, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 20, PC: 101, ADDR: 101, R0: 52, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 22, PC: 102, ADDR: 102, R0: 52, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 24, PC: 103, ADDR: 103, R0: 53, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'He' << 'l'
-  DEBUG    root:machine.py:390 {TICK: 26, PC: 104, ADDR: 104, R0: 53, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 28, PC: 105, ADDR: 105, R0: 53, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 29, PC: 101, ADDR: 101, R0: 53, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 31, PC: 102, ADDR: 102, R0: 53, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 33, PC: 103, ADDR: 103, R0: 54, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hel' << 'l'
-  DEBUG    root:machine.py:390 {TICK: 35, PC: 104, ADDR: 104, R0: 54, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 37, PC: 105, ADDR: 105, R0: 54, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 38, PC: 101, ADDR: 101, R0: 54, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 40, PC: 102, ADDR: 102, R0: 54, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 42, PC: 103, ADDR: 103, R0: 55, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hell' << 'o'
-  DEBUG    root:machine.py:390 {TICK: 44, PC: 104, ADDR: 104, R0: 55, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 46, PC: 105, ADDR: 105, R0: 55, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 47, PC: 101, ADDR: 101, R0: 55, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 49, PC: 102, ADDR: 102, R0: 55, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 51, PC: 103, ADDR: 103, R0: 56, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello' << ','
-  DEBUG    root:machine.py:390 {TICK: 53, PC: 104, ADDR: 104, R0: 56, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 55, PC: 105, ADDR: 105, R0: 56, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 56, PC: 101, ADDR: 101, R0: 56, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 58, PC: 102, ADDR: 102, R0: 56, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 60, PC: 103, ADDR: 103, R0: 57, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello,' << ' '
-  DEBUG    root:machine.py:390 {TICK: 62, PC: 104, ADDR: 104, R0: 57, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 64, PC: 105, ADDR: 105, R0: 57, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 65, PC: 101, ADDR: 101, R0: 57, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 67, PC: 102, ADDR: 102, R0: 57, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 69, PC: 103, ADDR: 103, R0: 58, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello, ' << 'w'
-  DEBUG    root:machine.py:390 {TICK: 71, PC: 104, ADDR: 104, R0: 58, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 73, PC: 105, ADDR: 105, R0: 58, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 74, PC: 101, ADDR: 101, R0: 58, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 76, PC: 102, ADDR: 102, R0: 58, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 78, PC: 103, ADDR: 103, R0: 59, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello, w' << 'o'
-  DEBUG    root:machine.py:390 {TICK: 80, PC: 104, ADDR: 104, R0: 59, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 82, PC: 105, ADDR: 105, R0: 59, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 83, PC: 101, ADDR: 101, R0: 59, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 85, PC: 102, ADDR: 102, R0: 59, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 87, PC: 103, ADDR: 103, R0: 60, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello, wo' << 'r'
-  DEBUG    root:machine.py:390 {TICK: 89, PC: 104, ADDR: 104, R0: 60, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 91, PC: 105, ADDR: 105, R0: 60, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 92, PC: 101, ADDR: 101, R0: 60, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 94, PC: 102, ADDR: 102, R0: 60, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 96, PC: 103, ADDR: 103, R0: 61, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello, wor' << 'l'
-  DEBUG    root:machine.py:390 {TICK: 98, PC: 104, ADDR: 104, R0: 61, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 100, PC: 105, ADDR: 105, R0: 61, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 101, PC: 101, ADDR: 101, R0: 61, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 103, PC: 102, ADDR: 102, R0: 61, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 105, PC: 103, ADDR: 103, R0: 62, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:128 output: 'Hello, worl' << 'd'
-  DEBUG    root:machine.py:390 {TICK: 107, PC: 104, ADDR: 104, R0: 62, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 109, PC: 105, ADDR: 105, R0: 62, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 110, PC: 101, ADDR: 101, R0: 62, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
-  DEBUG    root:machine.py:390 {TICK: 112, PC: 102, ADDR: 102, R0: 62, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
-  DEBUG    root:machine.py:390 {TICK: 114, PC: 103, ADDR: 103, R0: 63, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
-  DEBUG    root:machine.py:390 {TICK: 116, PC: 104, ADDR: 104, R0: 63, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
-  DEBUG    root:machine.py:390 {TICK: 118, PC: 105, ADDR: 105, R0: 63, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
-  DEBUG    root:machine.py:390 {TICK: 119, PC: 106, ADDR: 106, R0: 63, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } hlt 
-  INFO     root:machine.py:395 output_buffer: '0xcHello, world'
+  DEBUG:root:{TICK: 0, PC: 100, ADDR: 100, R0: 0, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } mov r0 0
+  DEBUG:root:{TICK: 2, PC: 101, ADDR: 101, R0: 50, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 4, PC: 102, ADDR: 102, R0: 50, R1: 48, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 7, PC: 103, ADDR: 103, R0: 51, R1: 48, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '' << '0'
+  DEBUG:root:{TICK: 9, PC: 104, ADDR: 104, R0: 51, R1: 48, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 14, PC: 105, ADDR: 105, R0: 51, R1: 48, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 15, PC: 101, ADDR: 101, R0: 51, R1: 48, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 17, PC: 102, ADDR: 102, R0: 51, R1: 120, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 20, PC: 103, ADDR: 103, R0: 52, R1: 120, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0' << 'x'
+  DEBUG:root:{TICK: 22, PC: 104, ADDR: 104, R0: 52, R1: 120, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 27, PC: 105, ADDR: 105, R0: 52, R1: 120, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 28, PC: 101, ADDR: 101, R0: 52, R1: 120, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 30, PC: 102, ADDR: 102, R0: 52, R1: 99, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 33, PC: 103, ADDR: 103, R0: 53, R1: 99, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0x' << 'c'
+  DEBUG:root:{TICK: 35, PC: 104, ADDR: 104, R0: 53, R1: 99, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 40, PC: 105, ADDR: 105, R0: 53, R1: 99, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 41, PC: 101, ADDR: 101, R0: 53, R1: 99, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 43, PC: 102, ADDR: 102, R0: 53, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 46, PC: 103, ADDR: 103, R0: 54, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xc' << 'H'
+  DEBUG:root:{TICK: 48, PC: 104, ADDR: 104, R0: 54, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 53, PC: 105, ADDR: 105, R0: 54, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 54, PC: 101, ADDR: 101, R0: 54, R1: 72, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 56, PC: 102, ADDR: 102, R0: 54, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 59, PC: 103, ADDR: 103, R0: 55, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcH' << 'e'
+  DEBUG:root:{TICK: 61, PC: 104, ADDR: 104, R0: 55, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 66, PC: 105, ADDR: 105, R0: 55, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 67, PC: 101, ADDR: 101, R0: 55, R1: 101, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 69, PC: 102, ADDR: 102, R0: 55, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 72, PC: 103, ADDR: 103, R0: 56, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHe' << 'l'
+  DEBUG:root:{TICK: 74, PC: 104, ADDR: 104, R0: 56, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 79, PC: 105, ADDR: 105, R0: 56, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 80, PC: 101, ADDR: 101, R0: 56, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 82, PC: 102, ADDR: 102, R0: 56, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 85, PC: 103, ADDR: 103, R0: 57, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHel' << 'l'
+  DEBUG:root:{TICK: 87, PC: 104, ADDR: 104, R0: 57, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 92, PC: 105, ADDR: 105, R0: 57, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 93, PC: 101, ADDR: 101, R0: 57, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 95, PC: 102, ADDR: 102, R0: 57, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 98, PC: 103, ADDR: 103, R0: 58, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHell' << 'o'
+  DEBUG:root:{TICK: 100, PC: 104, ADDR: 104, R0: 58, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 105, PC: 105, ADDR: 105, R0: 58, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 106, PC: 101, ADDR: 101, R0: 58, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 108, PC: 102, ADDR: 102, R0: 58, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 111, PC: 103, ADDR: 103, R0: 59, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello' << ','
+  DEBUG:root:{TICK: 113, PC: 104, ADDR: 104, R0: 59, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 118, PC: 105, ADDR: 105, R0: 59, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 119, PC: 101, ADDR: 101, R0: 59, R1: 44, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 121, PC: 102, ADDR: 102, R0: 59, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 124, PC: 103, ADDR: 103, R0: 60, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello,' << ' '
+  DEBUG:root:{TICK: 126, PC: 104, ADDR: 104, R0: 60, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 131, PC: 105, ADDR: 105, R0: 60, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 132, PC: 101, ADDR: 101, R0: 60, R1: 32, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 134, PC: 102, ADDR: 102, R0: 60, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 137, PC: 103, ADDR: 103, R0: 61, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello, ' << 'w'
+  DEBUG:root:{TICK: 139, PC: 104, ADDR: 104, R0: 61, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 144, PC: 105, ADDR: 105, R0: 61, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 145, PC: 101, ADDR: 101, R0: 61, R1: 119, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 147, PC: 102, ADDR: 102, R0: 61, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 150, PC: 103, ADDR: 103, R0: 62, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello, w' << 'o'
+  DEBUG:root:{TICK: 152, PC: 104, ADDR: 104, R0: 62, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 157, PC: 105, ADDR: 105, R0: 62, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 158, PC: 101, ADDR: 101, R0: 62, R1: 111, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 160, PC: 102, ADDR: 102, R0: 62, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 163, PC: 103, ADDR: 103, R0: 63, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello, wo' << 'r'
+  DEBUG:root:{TICK: 165, PC: 104, ADDR: 104, R0: 63, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 170, PC: 105, ADDR: 105, R0: 63, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 171, PC: 101, ADDR: 101, R0: 63, R1: 114, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 173, PC: 102, ADDR: 102, R0: 63, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 176, PC: 103, ADDR: 103, R0: 64, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello, wor' << 'l'
+  DEBUG:root:{TICK: 178, PC: 104, ADDR: 104, R0: 64, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 183, PC: 105, ADDR: 105, R0: 64, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 184, PC: 101, ADDR: 101, R0: 64, R1: 108, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 186, PC: 102, ADDR: 102, R0: 64, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 189, PC: 103, ADDR: 103, R0: 65, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello, worl' << 'd'
+  DEBUG:root:{TICK: 191, PC: 104, ADDR: 104, R0: 65, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 196, PC: 105, ADDR: 105, R0: 65, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 197, PC: 101, ADDR: 101, R0: 65, R1: 100, R2: 0, R3: 0, R4: 0, R5: 0 } mov r1 [r0]
+  DEBUG:root:{TICK: 199, PC: 102, ADDR: 102, R0: 65, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } add r0 1 -> r0
+  DEBUG:root:{TICK: 202, PC: 103, ADDR: 103, R0: 66, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } printc r1
+  DEBUG:root:output: '0xcHello, world' << '\x00'
+  DEBUG:root:{TICK: 204, PC: 104, ADDR: 104, R0: 66, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } cmp r1 null_term -> r1
+  DEBUG:root:{TICK: 209, PC: 105, ADDR: 105, R0: 66, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } jne 101
+  DEBUG:root:{TICK: 210, PC: 106, ADDR: 106, R0: 66, R1: 0, R2: 0, R3: 0, R4: 0, R5: 0 } hlt 
+  INFO:root:output_buffer: '0xcHello, world\x00'
 output: |
   source LoC: 3 code instr: 7
   ============================================================
   0xcHello, world
-  instr_counter:  81
+  instr_counter:  2
 code: |-
   [
       {
