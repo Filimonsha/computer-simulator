@@ -471,7 +471,7 @@ def simulation(code, input_buffer, memory_size, limit):
             assert limit > control_unit.mc_unit.tick_counter, "too long execution, increase limit!"
 
             control_unit.decode_and_execute_instruction()
-            logging.debug('%s', "control_unit.__prep__()")
+            logging.debug('%s', control_unit.__prep__())
     except EOFError:
         logging.warning('Input buffer is empty!')
     except StopIteration:
