@@ -11,7 +11,7 @@
     args ::=  word | number | list 
     function ::= math_operation | operation
     math_operation ::= "!=" | "*" | "+" | "-" | "/" | "%" | "=" | > | < 
-    operation ::= var | setvar | loop | if | return-from | print | printstr | printc
+    operation ::= var | setvar | loop | if | return-from | printint | printstr | printc
     letter ::= "a" | "b" | ... | "z" | "A" | ... | "Z"
     word ::= letter | letter word
     digit ::= "1" | "2" | ... | "9" | "0"
