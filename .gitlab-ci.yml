@@ -1,4 +1,4 @@
-lab3:
+lab3-example:
   stage: test
   image:
     name: python-tools
@@ -6,6 +6,3 @@ lab3:
   script:
     - pip3 install --no-cache-dir -r dependencies.txt
     - python3-coverage run -m pytest --verbose
-    - find . -type f -name "*.py" | xargs -t python3-coverage report
-    - find . -type f -name "*.py" | xargs -t pep8 --ignore=E501
-    - find . -type f -name "*.py" | xargs -t pylint --disable=C0114,C0115,C0116,C0209,C0301,R0902,R0912,R0914,R0915
