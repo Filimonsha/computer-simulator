@@ -494,7 +494,6 @@ def main(args):
             input_buff.append(char)
     output = simulation(code, input_buffer=input_buff, memory_size=150, limit=10000)
     print(''.join(output).strip())
-    print("instr_counter: ", 2)
     return output
 
 
